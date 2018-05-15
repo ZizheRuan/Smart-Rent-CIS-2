@@ -125,22 +125,23 @@
 
 <hr>
 
-<form>
+<form method="post" action="/webapp/update-rating/">
+    {% csrf_token %}
     {#Property Rating Section   #}
     <div class="container">
         <div class="row lead">
             <p>Rate the Location</p>
-            <div id="hearts" class="starrr"></div>
+            <input name="loc-rating" type="number" value="">
         </div>
 
         <div class="row lead">
             <p>Rate the facility</p>
-            <div id="hearts-existing" class="starrr" data-rating='4'></div>
+            <input name="fac-rating" type="number" value="">
         </div>
 
         <div class="row lead">
             <p>Rate the Transport</p>
-            <div id="hearts-existing" class="starrr" data-rating='4'></div>
+            <input name="tran-rating" type="number" value="">
         </div>
 
     </div>
@@ -149,17 +150,17 @@
     <div class="container">
         <div class="row lead">
             <p>Rate the friendliness</p>
-            <div id="hearts" class="starrr"></div>
+            <input name="fri-rating" type="number" value="">
         </div>
 
         <div class="row lead">
             <p>Rate the Response Rate</p>
-            <div id="hearts-existing" class="starrr" data-rating='4'></div>
+            <input name="res-rating" type="number" value="">
         </div>
 
         <div class="row lead">
             <p>Rate the Bond Refund </p>
-            <div id="hearts-existing" class="starrr" data-rating='4'></div>
+            <input name="bond-rating" type="number" value="">
         </div>
 
     </div>

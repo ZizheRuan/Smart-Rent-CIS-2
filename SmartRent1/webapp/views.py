@@ -142,7 +142,20 @@ def detailView(request,id):
     resource = get_object_or_404(Resource,pk=id)
     return render(request,'webapp/detail.html',{'resource':resource})
 
+def updateView(request):
+    if request.POST:
+        ratings = {
+            'loc-rating': request.POST['loc-rating'],
+            'fac-rating': request.POST['fac-rating'],
+            'tran-rating': request.POST['tran-rating'],
+            'fri-rating': request.POST['fri-rating'],
+            'res-rating': request.POST['res-rating'],
+            'bond-rating': request.POST['bond-rating'],
+        }
 
+        print(ratings)
+
+        return render(request,'webapp/updateRatings.html',{'ratings':ratings})
 
 
 
