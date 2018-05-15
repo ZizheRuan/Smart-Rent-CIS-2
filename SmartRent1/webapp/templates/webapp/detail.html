@@ -1,0 +1,183 @@
+{% extends 'webapp/base.html' %}
+{#{% block titile %}{{ resource }}{% endblock %}#}
+
+
+{% block body %}
+
+<style>
+.gallery-wrap .img-big-wrap img {
+    height: 450px;
+    width: auto;
+    display: inline-block;
+    cursor: zoom-in;
+}
+
+
+.gallery-wrap .img-small-wrap .item-gallery {
+    width: 60px;
+    height: 60px;
+    border: 1px solid #ddd;
+    margin: 7px 2px;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.gallery-wrap .img-small-wrap {
+    text-align: center;
+}
+.gallery-wrap .img-small-wrap img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: zoom-in;
+}
+
+
+
+</style>
+
+<hr class="divider">
+
+<div class="container">
+
+<div class="card">
+	<div class="row">
+		<aside class="col-sm-5 border-right">
+
+<article class="gallery-wrap">
+<div class="img-big-wrap">
+  <div> <a href="#"><img src="{{resource.property.house_img }}" class="img-responsive"></a></div>
+</div> <!-- slider-product.// -->
+</article> <!-- gallery-wrap .end// -->
+		</aside>
+		<aside class="col-sm-7">
+
+<article class="card-body p-5">
+
+
+
+<h3 class="title mb-3">{{ resource.property.address }}</h3>
+
+<p class="price-detail-wrap">
+	<span class="price h3 text-warning">
+		<span class="currency">AUD $</span><span class="num">{{ resource.price }}</span>
+	</span>
+	<span>/Week</span>
+</p> <!-- price-detail-wrap .// -->
+
+<dl class="param param-feature">
+  <dt>Bedroom Num</dt>
+  <dd>{{ resource.property.no_bed }}</dd>
+</dl>  <!-- item-property-hor .// -->
+
+<dl class="param param-feature">
+  <dt>Bathroom Num</dt>
+  <dd>{{ resource.property.no_bath }}</dd>
+</dl>  <!-- item-property-hor .// -->
+
+<dl class="param param-feature">
+  <dt>Location Ratings</dt>
+  <dd>{{ resource.property.loc_rating }}</dd>
+</dl>  <!-- item-property-hor .// -->
+
+<dl class="param param-feature">
+  <dt>Facility Ratings</dt>
+  <dd>{{ resource.property.fac_rating }}</dd>
+</dl>  <!-- item-property-hor .// -->
+
+<dl class="param param-feature">
+  <dt>Transpor Ratings</dt>
+  <dd>{{ resource.property.tran_rating }}</dd>
+</dl>  <!-- item-property-hor .// -->
+<dl class="param param-feature">
+  <dt>Comment</dt>
+  <dd>{{ resource.property.comment }}</dd>
+</dl>  <!-- item-property-hor .// -->
+
+{#below are agent info and ratings#}
+<dl class="param param-feature">
+  <dt>Agent Name</dt>
+  <dd>{{ resource.agency.name }}</dd>
+</dl>  <!-- item-property-hor .// -->
+
+<dl class="param param-feature">
+  <dt>Agent Company</dt>
+  <dd>{{ resource.agency.company }}</dd>
+</dl>  <!-- item-property-hor .// -->
+
+<dl class="param param-feature">
+  <dt>Friendly/dt>
+  <dd>{{ resource.agency.fri_rating }}</dd>
+</dl>  <!-- item-property-hor .// -->
+
+<dl class="param param-feature">
+  <dt>Response</dt>
+  <dd>{{ resource.agency.res_rating }}</dd>
+</dl>  <!-- item-property-hor .// -->
+
+<dl class="param param-feature">
+  <dt>Bond Refund</dt>
+  <dd>{{ resource.agency.bond_rating }}</dd>
+</dl>  <!-- item-property-hor .// -->
+
+
+
+<hr>
+
+<form>
+    {#Property Rating Section   #}
+    <div class="container">
+        <div class="row lead">
+            <p>Rate the Location</p>
+            <div id="hearts" class="starrr"></div>
+        </div>
+
+        <div class="row lead">
+            <p>Rate the facility</p>
+            <div id="hearts-existing" class="starrr" data-rating='4'></div>
+        </div>
+
+        <div class="row lead">
+            <p>Rate the Transport</p>
+            <div id="hearts-existing" class="starrr" data-rating='4'></div>
+        </div>
+
+    </div>
+
+    {#Agent Rating Section#}
+    <div class="container">
+        <div class="row lead">
+            <p>Rate the friendliness</p>
+            <div id="hearts" class="starrr"></div>
+        </div>
+
+        <div class="row lead">
+            <p>Rate the Response Rate</p>
+            <div id="hearts-existing" class="starrr" data-rating='4'></div>
+        </div>
+
+        <div class="row lead">
+            <p>Rate the Bond Refund </p>
+            <div id="hearts-existing" class="starrr" data-rating='4'></div>
+        </div>
+
+    </div>
+
+    <button type="submit" value="Submit">
+        <span class="glyphicon glyphicon-user">Submit</span>
+    </button>
+
+
+
+</form>
+
+
+<!--container.//-->
+
+</article>
+        </aside>
+        </div>
+    </div>
+</div>
+{% endblock %}
