@@ -107,7 +107,7 @@
 </dl>  <!-- item-property-hor .// -->
 
 <dl class="param param-feature">
-  <dt>Friendly/dt>
+  <dt>Friendly</dt>
   <dd>{{ resource.agency.fri_rating }}</dd>
 </dl>  <!-- item-property-hor .// -->
 
@@ -131,17 +131,17 @@
     <div class="container">
         <div class="row lead">
             <p>Rate the Location</p>
-            <input name="loc-rating" type="number" value="">
+            <input name="loc-rating" type="number" value="" min="0" max="5">
         </div>
 
         <div class="row lead">
             <p>Rate the facility</p>
-            <input name="fac-rating" type="number" value="">
+            <input name="fac-rating" type="number" value="" min="0" max="5">
         </div>
 
         <div class="row lead">
             <p>Rate the Transport</p>
-            <input name="tran-rating" type="number" value="">
+            <input name="tran-rating" type="number" value="" min="0" max="5">
         </div>
 
     </div>
@@ -150,20 +150,22 @@
     <div class="container">
         <div class="row lead">
             <p>Rate the friendliness</p>
-            <input name="fri-rating" type="number" value="">
+            <input name="fri-rating" type="number" value="" min="0" max="5">
         </div>
 
         <div class="row lead">
             <p>Rate the Response Rate</p>
-            <input name="res-rating" type="number" value="">
+            <input name="res-rating" type="number" value="" min="0" max="5">
         </div>
 
         <div class="row lead">
             <p>Rate the Bond Refund </p>
-            <input name="bond-rating" type="number" value="">
+            <input name="bond-rating" type="number" value="" min="0" max="5">
         </div>
 
     </div>
+
+    <input type="hidden" name="resource-id" value="{{resource.id}}">
 
     <button type="submit" value="Submit">
         <span class="glyphicon glyphicon-user">Submit</span>
