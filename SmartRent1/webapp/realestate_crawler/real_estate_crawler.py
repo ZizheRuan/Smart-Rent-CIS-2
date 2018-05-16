@@ -88,10 +88,21 @@ def gather_information(pageNumber, cityName):
     # print(house_info)
     return house_info
 
-# gather_information(1, 'melbourne')
+# gather_information(3, 'melbourne')
 # -------------多线程，提升速度，需要修改
 # def info_return(page_number):
 #     pool = Pool()
 #     resultlist = pool.map(gather_information, range(page_number))
 #     write_to_file(resultlist)
 #     return resultlist
+
+def mannual_gather_info(pageNumber):
+
+    url = 'https://www.realestate.com.au/rent/in-melbourne,+vic/list-' + str(pageNumber)
+    data = get_one_page(url)
+    every_page = parse_one_page(data)
+    print(data)
+    for item in every_page:
+        write_to_file(item)
+
+# mannual_gather_info(9)
