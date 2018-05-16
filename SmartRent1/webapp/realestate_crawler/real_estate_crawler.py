@@ -73,7 +73,7 @@ def gather_realestate_info(pageNumber, cityName):
 
     return house_info
 
-gather_realestate_info(100, 'melbourne')
+# gather_realestate_info(100, 'melbourne')
 
 
 
