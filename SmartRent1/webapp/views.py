@@ -49,23 +49,26 @@ def search_basic(request):
             result_basic = Resource.objects.filter(property__distance_umel__lt=10000).order_by(
                 'property__distance_umel').select_related(
                 'property').select_related('agency')
+            uniName = 'University of Melbourne'
         elif match_rmit:
             print('match_rmit')
             result_basic = Resource.objects.filter(property__distance_rmit__lt=10000).order_by(
                 'property__distance_rmit').select_related(
                 'property').select_related('agency')
+            uniName = 'RMIT University'
         else:
             print('match_other')
             result_basic = Resource.objects.filter(property__address__contains=str(searhInput)).select_related(
                 'property').select_related('agency')
-
+            uniName = 'Any'
+        
         # result_basic = result_basic.distinct(result_basic,result_basic.property.address)
         for each in result_basic:
             print(each.price + '   ' + str(each.property.no_bed)+ '   ' +' Distance-umel: '+str(each.property.distance_umel)
-                  +' Distance-rmit: '+str(each.property.distance_rmit))
+                  +' Distance-rmit: '+str(each.property.distance_rmit)+' Uni: '+uniName)
 
         searchResultTemplate = 'webapp/searchBasic.html'
-        return render(request, searchResultTemplate, {'result_basic': result_basic})
+        return render(request, searchResultTemplate, {'result_basic': result_basic, 'uniName': uniName})
 
 
 def search_advanced(request):
@@ -92,7 +95,7 @@ def search_advanced(request):
         print(result_advanced)
         for each in result_advanced:
             print(each.price + '   ' + str(each.property.no_bed)+'   ' + str(each.property.house_type)+' Distance-umel: '+str(each.property.distance_umel)
-                  +' Distance-rmit: '+str(each.property.distance_rmit))
+                  +' Distance-rmit: '+str(each.property.distance_rmit)+ ' Uni: '+ advanced_input['uniName'])
 
         print('***************')
         print(advanced_input)
