@@ -7,6 +7,9 @@ from .realestate_crawler import real_estate_crawler
 from django.views.decorators import csrf
 from .models import Property,Agency,Resource
 from decimal import Decimal
+import random
+import re
+
 
 # Create your views here.
 def indexView(request):
@@ -39,10 +42,27 @@ def search_basic(request):
         print(searhInput)
         print('--------------')
 
-        result_basic = Resource.objects.filter(property__address__contains=str(searhInput)).select_related('property').select_related('agency')
+        match_umel = re.search("University of Melbourne",str(searhInput))
+        match_rmit = re.search("RMIT", str(searhInput))
+        if match_umel:
+            print('match_umel')
+            result_basic = Resource.objects.filter(property__distance_umel__lt=10000).order_by(
+                'property__distance_umel').select_related(
+                'property').select_related('agency')
+        elif match_rmit:
+            print('match_rmit')
+            result_basic = Resource.objects.filter(property__distance_rmit__lt=10000).order_by(
+                'property__distance_rmit').select_related(
+                'property').select_related('agency')
+        else:
+            print('match_other')
+            result_basic = Resource.objects.filter(property__address__contains=str(searhInput)).select_related(
+                'property').select_related('agency')
+
         # result_basic = result_basic.distinct(result_basic,result_basic.property.address)
-        # for each in result_basic:
-        #     print(each.price + '   ' + str(each.property.no_bed))
+        for each in result_basic:
+            print(each.price + '   ' + str(each.property.no_bed)+ '   ' +' Distance-umel: '+str(each.property.distance_umel)
+                  +' Distance-rmit: '+str(each.property.distance_rmit))
 
         searchResultTemplate = 'webapp/searchBasic.html'
         return render(request, searchResultTemplate, {'result_basic': result_basic})
@@ -57,20 +77,29 @@ def search_advanced(request):
             'bedNum': request.POST['bed-num']
         }
 
-        result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
-            property__no_bed__exact=advanced_input['bedNum']).select_related('agency')
-        # result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(
-        #     propertyproperty__no_bed__exact=advanced_input['bedNum']).select_related('agency')
+        if advanced_input['uniName'] == 'University of Melbourne' :
+            result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
+                property__no_bed__exact=advanced_input['bedNum']).filter(property__distance_umel__lt=10000).select_related('agency').order_by('property__distance_umel')
+
+        elif advanced_input['uniName'] == 'RMIT University' :
+            result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
+                property__no_bed__exact=advanced_input['bedNum']).filter(property__distance_rmit__lt=10000).select_related('agency').order_by('property__distance_rmit')
+
+        else:
+            result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
+                property__no_bed__exact=advanced_input['bedNum']).select_related('agency').order_by('price')
+
         print(result_advanced)
         for each in result_advanced:
-            print(each.price + '   ' + str(each.property.no_bed)+'   ' + str(each.property.house_type))
+            print(each.price + '   ' + str(each.property.no_bed)+'   ' + str(each.property.house_type)+' Distance-umel: '+str(each.property.distance_umel)
+                  +' Distance-rmit: '+str(each.property.distance_rmit))
 
         print('***************')
         print(advanced_input)
         print('***************')
         searchResultTemplate = 'webapp/searchAdvanced.html'
         # return render(request,searchResultTemplate,{'advanced_input':advanced_input})
-        return render(request, searchResultTemplate, {'result_advanced': result_advanced})
+        return render(request, searchResultTemplate, {'result_advanced': result_advanced, 'uniName': advanced_input['uniName']})
 
 def saveToTable(request) :
     crawled_info = real_estate_crawler.gather_information(1, 'melbourne')
@@ -92,8 +121,12 @@ def saveToTable(request) :
         pList[i].no_bed = feature['bed']
         pList[i].no_bath = feature['bathroom']
         pList[i].house_type = feature['houseType']
-        pList[i].distance_umel = 0
-        pList[i].distance_rmit = 0
+
+        random.seed(a=None, version=2)
+        random1 = random.randint(200,10000)
+        random2 = random.randint(200,10000)
+        pList[i].distance_umel = random1
+        pList[i].distance_rmit = random2
         pList[i].save()
 
         aList[i].name = feature['agentPeople']
