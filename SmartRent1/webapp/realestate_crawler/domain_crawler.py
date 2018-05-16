@@ -1,8 +1,3 @@
-from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import re
 from pyquery import PyQuery as pq
 import json
@@ -14,12 +9,8 @@ import csv
 
 
 def get_house(page_number):
-    brower = webdriver.Chrome()
-    wait = WebDriverWait(brower, 20)
-    brower.get('https://www.domain.com.au/rent/?ssubs=1&suburb=melbourne-vic-3000&page=' + str(page_number))
-    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.search-results__main ul.search-results__results li.search-results__listing')))
-    html = brower.page_source
-    doc = pq(html).html()
+    url = 'https://www.domain.com.au/rent/?ssubs=1&suburb=melbourne-vic-3000&page=' + str(page_number)
+    doc = pq(url= url).html()
     return doc
 
 
@@ -28,7 +19,7 @@ def parse_one_page(html):
     pattern = re.compile(
         'listingModel.*?url":"(.*?)"'
         + '.*?images":\["(.*?)"'
-        + '.*?price":"\$(.*?)"'
+        + '.*?price":"(\$.*?)"'
         + '.*?brandName":"(.*?)"'
         + '.*?agentPhoto":(.*?),'
         + '.*?agentName":"(.*?)"'
@@ -74,17 +65,17 @@ def write_to_file_list(content):
 
 def gather_domain_info(startpageNUmber):
     house_info = []
-    for currentPage in range(startpageNUmber):
-        currentPage += 1
-        file = get_house(currentPage)
-        # file = open('result.txt', 'r').read()
-        results = parse_one_page(file)
+    with open('domain.csv', 'w') as f:
+        for currentPage in range(startpageNUmber):
+            currentPage += 1
+            file = get_house(currentPage)
+            # file = open('result.txt', 'r').read()
+            results = parse_one_page(file)
 
-        i = 0
-        with open('domain.csv', 'w') as f:
+            i = 0
 
             for item in results:
-                print(item)
+                # print(item)
                 # write_to_file(item)
                 house_info.append(item)
                 i += 1
@@ -102,4 +93,4 @@ def gather_domain_info(startpageNUmber):
 
 
 
-# gather_domain_info(1)
+# gather_domain_info(5)

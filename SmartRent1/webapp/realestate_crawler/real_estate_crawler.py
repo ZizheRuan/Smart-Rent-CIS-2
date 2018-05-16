@@ -17,6 +17,7 @@ def parse_one_page(pageNumber, cityName):
         find_house_type = re.search('-(.*?)-', house_type_info, re.M).group(1)
         price_info = item.find('p').text()
         find_price = re.search('\$(.*?)\s', price_info, re.M)
+        print(type(find_price))
         if find_price == None:
             find_price = 99999
         else:
@@ -74,7 +75,6 @@ def gather_realestate_info(pageNumber, cityName):
     return house_info
 
 # gather_realestate_info(100, 'melbourne')
-
 
 
 
