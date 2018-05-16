@@ -74,6 +74,7 @@
                        <li><br/><strong>Agent Ratings:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</strong><span class="rating-box-iob" id="aratings-{{forloop.counter}}">5</span></li>
 
                        <li><br/><strong>Property Ratings:&nbsp&nbsp</strong><span class="rating-box-iob" id="pratings-{{forloop.counter}}">2</span></li>
+                       <li id="showdistance-{{forloop.counter}}"><strong>Distance to <span id="uniname-{{forloop.counter}}" >Uni</span> <span id="distance-{{forloop.counter}}">1000m</span>m </strong></li>
                    </ul>
                     <br>
                     <a href="{% url 'webapp:detail' resource.id %}" class="detail" role="button">View Detail</a>
@@ -87,6 +88,21 @@
 </section>
 
                     <script type="text/javascript">
+
+                         var uni = "{{uniName}}";
+                         console.log(uni);
+                         document.getElementById("uniname-{{forloop.counter}}").innerHTML= uni;
+                         if(uni ==="RMIT University"){
+                             var distance1 = "{{resource.property.distance_rmit}}";
+                             console.log("{{resource.property.distance_rmit}}");
+                             document.getElementById("distance-{{forloop.counter}}").innerHTML=distance1;
+                         }else if(uni === "University of Melbourne"){
+                             var distance2 = "{{resource.property.distance_umel}}";
+                             document.getElementById("distance-{{forloop.counter}}").innerHTML=distance2;
+                         }else{
+                             document.getElementById("showdistance-{{forloop.counter}}").style.display = "none";
+                         }
+
                          var loc_rating = "{{resource.property.loc_rating}}";
                          var fac_rating = "{{resource.property.fac_rating}}";
                          var tran_rating ="{{resource.property.tran_rating}}";

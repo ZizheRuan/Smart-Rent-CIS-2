@@ -72,7 +72,7 @@
                             {% csrf_token %}
                           <div class="form-group">
                             <label for="location1" class="control-label">University</label>
-                            <select class="form-control" name="uni-name" id="location1" value="Any">
+                            <select class="form-control" name="uni-name" id="location1" value="Any" required>
                               <option value="Any">Any</option>
                               <option value="University of Melbourne">University of Melbourne</option>
                               <option value="RMIT University">RMIT University</option>
@@ -80,7 +80,7 @@
                           </div>
                           <div class="form-group">
                             <label for="type1" class="control-label">Type</label>
-                            <select class="form-control" name="house-type" id="type1" value="Any">
+                            <select class="form-control" name="house-type" id="type1" value="Any" required>
                               <option value="any">any</option>
                               <option value="house">house</option>
                               <option value="apartment">apartment</option>
@@ -91,14 +91,14 @@
                             <label for="pricefrom" class="control-label">Max Price</label>
                             <div class="input-group">
                               <div class="input-group-addon" id="basic-addon1">$</div>
-                              <input type="text" class="form-control" name="max-price" id="pricefrom" aria-describedby="basic-addon1">
+                              <input type="text" class="form-control" name="max-price" id="pricefrom" aria-describedby="basic-addon1" required>
                             </div>
                           </div>
                           <div class="form-group">
                             <label for="priceto" class="control-label">Bed Number</label>
                             <div class="input-group">
                               <div class="input-group-addon" id="basic-addon2">$</div>
-                              <input type="text" class="form-control" name="bed-num" id="priceto" aria-describedby="basic-addon1">
+                              <input type="text" class="form-control" name="bed-num" id="priceto" aria-describedby="basic-addon1" required>
                             </div>
                           </div>
                           <button type="submit" class="btn btn-danger glyphicon glyphicon-search" value="Submit"></button>
