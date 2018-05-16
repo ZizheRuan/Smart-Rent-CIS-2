@@ -42,8 +42,8 @@ def search_basic(request):
         print(searhInput)
         print('--------------')
 
-        match_umel = re.search("University of Melbourne",str(searhInput))
-        match_rmit = re.search("RMIT", str(searhInput))
+        match_umel = re.search("((?i)U(\w*\s*)*(MEL)\w*)|((?i)(MEL)(\w*\s*)*U\w*)", str(searhInput))
+        match_rmit = re.search("((?i)R(\w*\s*)*M(\w*\s*)*I(\w*\s*)*T(\w*\s*)*)", str(searhInput))
         if match_umel:
             print('match_umel')
             result_basic = Resource.objects.filter(property__distance_umel__lt=10000).order_by(
