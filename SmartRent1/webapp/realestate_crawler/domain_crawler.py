@@ -1,11 +1,7 @@
-from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import re
 from pyquery import PyQuery as pq
 import json
+import csv
 
 
 
@@ -13,12 +9,8 @@ import json
 
 
 def get_house(page_number):
-    brower = webdriver.Chrome()
-    wait = WebDriverWait(brower, 20)
-    brower.get('https://www.domain.com.au/rent/?ssubs=1&suburb=melbourne-vic-3000&page=' + str(page_number))
-    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.search-results__main ul.search-results__results li.search-results__listing')))
-    html = brower.page_source
-    doc = pq(html).html()
+    url = 'https://www.domain.com.au/rent/?ssubs=1&suburb=melbourne-vic-3000&page=' + str(page_number)
+    doc = pq(url= url).html()
     return doc
 
 
@@ -27,7 +19,7 @@ def parse_one_page(html):
     pattern = re.compile(
         'listingModel.*?url":"(.*?)"'
         + '.*?images":\["(.*?)"'
-        + '.*?price":"\$(.*?)"'
+        + '.*?price":"(\$.*?)"'
         + '.*?brandName":"(.*?)"'
         + '.*?agentPhoto":(.*?),'
         + '.*?agentName":"(.*?)"'
@@ -59,47 +51,46 @@ def parse_one_page(html):
         }
 
 
-# def gather_domain_info(pageNumber):
-#
-#     if pageNumber <=1 :
-#         pageNumber = 1
-#     house_info = []
-#     for currentPage in range(pageNumber):
-#         url = 'https://www.domain.com.au/rent/?ssubs=1&suburb=melbourne-vic-3000&page=' + str(currentPage + 1)
-#         file = get_house(url)
-#         result = parse_one_page(file)
-#         currentPage += 1
-#         i = 0
-#         for item in result:
-#             house_info.append(item)
-#             i += 1
-#
-#     return house_info
-#
-# gather_domain_info(1)
 
-def write_to_file(content):
-    with open('result.txt', 'a') as f:
-        f.write(json.dumps(content) + '\n')
+
+def write_to_file_list(content):
+    with open('domain_result.txt', 'wb') as f:
+        for item in content:
+            f.write(item)
         f.close()
+        # f.write(json.dumps(content) + '\n')
+        # f.write(content)
+        # f.close()
 
 
-def gather_domain_info(pageNUmber):
+def gather_domain_info(startpageNUmber):
     house_info = []
-    for currentPage in range(pageNUmber):
-        currentPage += 1
-        file = get_house(currentPage)
-        # file = open('result.txt', 'r').read()
-        results = parse_one_page(file)
+    with open('domain.csv', 'w') as f:
+        for currentPage in range(startpageNUmber):
+            currentPage += 1
+            file = get_house(currentPage)
+            # file = open('result.txt', 'r').read()
+            results = parse_one_page(file)
 
-        i = 0
-        for item in results:
-            print(item)
-            # write_to_file(item)
-            house_info.append(item)
-            i += 1
+            i = 0
+
+            for item in results:
+                # print(item)
+                # write_to_file(item)
+                house_info.append(item)
+                i += 1
+                w = csv.DictWriter(f, item.keys())
+                if i == 1:
+                    w.writeheader()
+                    w.writerow(item)
+                else:
+                    w.writerow(item)
+
+    # print(house_info)
+    # print(type(house_info))
+    # write_to_file_list(house_info)
     return house_info
 
 
 
-gather_domain_info(5)
+# gather_domain_info(5)
