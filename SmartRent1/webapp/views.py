@@ -6,6 +6,7 @@ from .models import Property, Agency, Resource
 from .realestate_crawler import real_estate_crawler
 from django.views.decorators import csrf
 from .models import Property,Agency,Resource
+from decimal import Decimal
 
 # Create your views here.
 def indexView(request):
@@ -14,7 +15,7 @@ def indexView(request):
 
 def getData(request):
     print('hahahha')
-    data = real_estate_crawler.gather_information(10, 'melbourne')
+    data = real_estate_crawler.gather_information(1, 'melbourne')
     page = data[0]
     agent_name = page['agent']
     agent_img = page['agentPic']
@@ -72,7 +73,7 @@ def search_advanced(request):
         return render(request, searchResultTemplate, {'result_advanced': result_advanced})
 
 def saveToTable(request) :
-    crawled_info = real_estate_crawler.gather_information(10, 'melbourne')
+    crawled_info = real_estate_crawler.gather_information(1, 'melbourne')
     size = len(crawled_info)
     pList = []
     aList = []
@@ -91,6 +92,8 @@ def saveToTable(request) :
         pList[i].no_bed = feature['bed']
         pList[i].no_bath = feature['bathroom']
         pList[i].house_type = feature['houseType']
+        pList[i].distance_umel = 0
+        pList[i].distance_rmit = 0
         pList[i].save()
 
         aList[i].name = feature['agentPeople']
@@ -151,7 +154,34 @@ def updateView(request):
             'fri-rating': request.POST['fri-rating'],
             'res-rating': request.POST['res-rating'],
             'bond-rating': request.POST['bond-rating'],
+            'resource-id': request.POST['resource-id'],
         }
+
+        property_to_update_rating = Property.objects.get(pk=ratings['resource-id'])
+        agency_to_update_rating = Agency.objects.get(pk=ratings['resource-id'])
+
+        property_to_update_rating.loc_rating = (  property_to_update_rating.loc_rating + Decimal(ratings['loc-rating'].strip('"'))  )/2
+        property_to_update_rating.fac_rating = (  property_to_update_rating.fac_rating + Decimal(ratings['fac-rating'].strip('"'))  )/2
+        property_to_update_rating.tran_rating = (  property_to_update_rating.tran_rating + Decimal(ratings['tran-rating'].strip('"'))  )/2
+
+        agency_to_update_rating.fri_rating = (  agency_to_update_rating.fri_rating + Decimal(ratings['fri-rating'].strip('"'))  )/2
+        agency_to_update_rating.res_rating = (  agency_to_update_rating.res_rating + Decimal(ratings['res-rating'].strip('"'))  )/2
+        agency_to_update_rating.bond_rating = (  agency_to_update_rating.bond_rating + Decimal(ratings['bond-rating'].strip('"'))  )/2
+
+        property_to_update_rating.save()
+        agency_to_update_rating.save()
+
+        # =========CODE TO RESET RATINGS TO 5 POINTS.========DO NOT DELETE==============
+        # property_to_update_rating = Property.objects.get(pk=ratings['resource-id'])
+        # agency_to_update_rating = Agency.objects.get(pk=ratings['resource-id'])
+        # property_to_update_rating.loc_rating = 5
+        # property_to_update_rating.fac_rating = 5
+        # property_to_update_rating.tran_rating = 5
+        # agency_to_update_rating.fri_rating = 5
+        # agency_to_update_rating.res_rating = 5
+        # agency_to_update_rating.bond_rating = 5
+        # property_to_update_rating.save()
+        # agency_to_update_rating.save()
 
         print(ratings)
 

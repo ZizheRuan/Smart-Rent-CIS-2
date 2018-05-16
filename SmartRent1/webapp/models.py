@@ -11,11 +11,11 @@ class Property(models.Model):
     no_bed = models.IntegerField(blank=True)
     no_bath = models.IntegerField(blank=True)
     house_type = models.CharField(max_length=20, blank=True)
+    distance_umel = models.IntegerField(blank=True)
+    distance_rmit = models.IntegerField(blank=True)
 
     def __str__(self):
         return self.address
-
-
 
 class Agency(models.Model):
     name = models.CharField(max_length=30)
