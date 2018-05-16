@@ -19,7 +19,8 @@ def parse_one_page(pageNumber, cityName):
         find_price = re.search('\$(.*?)\s', price_info, re.M)
         print(type(find_price))
         if find_price == None:
-            find_price = 99999
+            # find_price = 99999
+            print('I can accept None price, Ill handle it in views')
         else:
             find_price = find_price.group(1)
         agent_people_info = item.find('div .agent-wrapper img').attr('alt')

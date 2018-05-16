@@ -35,6 +35,19 @@ def parse_one_page(html):
 
     items = re.findall(pattern, html)
     for item in items:
+        string_to_replace = item[2]
+        # replaced = re.sub('[\$,per\s*week,pw,Per\s*week,Per\s*Week,]', '',item[2])
+        replaced1 = re.sub(r'\,', '', item[2])
+        replaced1_1 = re.sub(r'p', '', replaced1)
+        replaced2 = re.sub(r'w', '', replaced1_1)
+        print (replaced2)
+        replaced3 = 'nothing'
+
+        replaced3 = re.search('\$\w{4}|(\w{3})',replaced2,re.IGNORECASE).group(1)
+        if replaced3 is None:
+            replaced3 = re.search('\$(\w{4})|\$(\w{3})', replaced2, re.IGNORECASE).group(1)
+
+        print (string_to_replace+' =====replaced by===== '+str(replaced3))
         yield {
 
             'urlDetail': 'https://www.domain.com.au' + item[0],
@@ -43,7 +56,8 @@ def parse_one_page(html):
             'agentPic': item[4],
             'agentPeople': item[5],
             'agentCompany': item[3],
-            'price': item[2],
+            # 'price': item[2],
+            'price': replaced3,
             'location': item[6] + ',' + item[7] + ',' + item[8] + ',' + item[9],
             'bed': item[10],
             'bathroom': item[11]
@@ -68,6 +82,7 @@ def gather_domain_info(startpageNUmber):
     with open('domain.csv', 'w') as f:
         for currentPage in range(startpageNUmber):
             currentPage += 1
+            print('parsing Page:'+str(currentPage))
             file = get_house(currentPage)
             # file = open('result.txt', 'r').read()
             results = parse_one_page(file)
@@ -75,9 +90,10 @@ def gather_domain_info(startpageNUmber):
             i = 0
 
             for item in results:
-                # print(item)
+                print(item)
                 # write_to_file(item)
                 house_info.append(item)
+                print('house_info item generated')
                 i += 1
                 w = csv.DictWriter(f, item.keys())
                 if i == 1:

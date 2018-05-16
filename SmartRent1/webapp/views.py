@@ -4,6 +4,7 @@ from django.views.generic import View
 from django.shortcuts import render, get_object_or_404
 from .models import Property, Agency, Resource
 from .realestate_crawler import real_estate_crawler
+from .realestate_crawler import domain_crawler
 from django.views.decorators import csrf
 from .models import Property,Agency,Resource
 from decimal import Decimal
@@ -59,9 +60,9 @@ def search_basic(request):
         else:
             print('match_other')
             result_basic = Resource.objects.filter(property__address__contains=str(searhInput)).select_related(
-                'property').select_related('agency')
+                'property').select_related('agency').order_by('price')
             uniName = 'Any'
-        
+
         # result_basic = result_basic.distinct(result_basic,result_basic.property.address)
         for each in result_basic:
             print(each.price + '   ' + str(each.property.no_bed)+ '   ' +' Distance-umel: '+str(each.property.distance_umel)
@@ -105,13 +106,33 @@ def search_advanced(request):
         return render(request, searchResultTemplate, {'result_advanced': result_advanced, 'uniName': advanced_input['uniName']})
 
 def saveToTable(request) :
-    crawled_info = real_estate_crawler.gather_information(1, 'melbourne')
+    print('save to table function begin')
+    # crawled_info = real_estate_crawler.gather_realestate_info(150, 'melbourne')
+    crawled_info = domain_crawler.gather_domain_info(47)
+    print('crawling finished')
     size = len(crawled_info)
     pList = []
     aList = []
     rList = []
-    for i in range(0, size):
-        feature = crawled_info[i]
+    i = 0
+    # i = 574
+    # for i in range(0, size):
+    for feature in crawled_info:
+        # print('loop begin')
+        # feature = crawled_info[i]
+        # print('saving crawled_info'+str(i))
+        if ((feature['location'] is None)
+            or(feature['housePic'] is None)or(feature['bed'] is None)
+                                                                             or(feature['bathroom'] is None)
+                                                                                or (feature['houseType'] is None)
+                                                                                    or (feature['agentPeople'] is None)
+                                                                                        or (
+                        feature['agentPic'] is None)or(feature['agentPic']=='null')or(feature['agentCompany'] is None)or(feature['urlDetail'] is None)
+                                                                                        or (
+                                    feature['price'] == '99999')or(feature['price'] is None)) is True:
+            print('failure found')
+            continue
+        print('success found No.'+str(i))
         pList.append(Property())
         aList.append(Agency())
         rList.append(Resource())
@@ -122,7 +143,9 @@ def saveToTable(request) :
         pList[i].tran_rating = 5
         pList[i].comment = 'good'
         pList[i].no_bed = feature['bed']
-        pList[i].no_bath = feature['bathroom']
+        pList[i].no_bath = 1
+        if feature['bathroom'] != '' :
+            pList[i].no_bath = feature['bathroom']
         pList[i].house_type = feature['houseType']
 
         random.seed(a=None, version=2)
@@ -145,10 +168,24 @@ def saveToTable(request) :
         rList[i].property = pList[i]
         rList[i].agency = aList[i]
         rList[i].link = feature['urlDetail']
+        # ===================================================
         rList[i].price = feature['price']
+
+        # ===================================================
+        # replaced1 = re.sub(r'\,', '', feature['price'])
+        # replaced2 = re.sub(r'p', '', replaced1)
+        # replaced3 = re.sub(r'w', '', replaced2)
+        # replaced4 = re.search('\w{4}|(\w{3})',replaced3,re.IGNORECASE).group(1)
+        # if replaced4 is None:
+        #     replaced4 = re.search('(\w{4})|\$(\w{3})', replaced3, re.IGNORECASE).group(1)
+        # rList[i].price = replaced4
+        # print(feature['price']+'==========>>>'+replaced1+'==========>>>'+replaced4)
+        # ===================================================
+
         rList[i].save()
         print(rList[i])
         print('r is saved')
+        i = i+1
 
     showResultTemplate = 'webapp/showResult.html'
     return render(request, showResultTemplate, {'crawled_info':crawled_info})
