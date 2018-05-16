@@ -1,11 +1,6 @@
 import re
 from pyquery import PyQuery as pq
-import json
 import csv
-
-
-
-
 
 
 def get_house(page_number):
@@ -36,7 +31,6 @@ def parse_one_page(html):
     items = re.findall(pattern, html)
     for item in items:
         string_to_replace = item[2]
-        # replaced = re.sub('[\$,per\s*week,pw,Per\s*week,Per\s*Week,]', '',item[2])
         replaced1 = re.sub(r'\,', '', item[2])
         replaced1_1 = re.sub(r'p', '', replaced1)
         replaced2 = re.sub(r'w', '', replaced1_1)
@@ -56,7 +50,6 @@ def parse_one_page(html):
             'agentPic': item[4],
             'agentPeople': item[5],
             'agentCompany': item[3],
-            # 'price': item[2],
             'price': replaced3,
             'location': item[6] + ',' + item[7] + ',' + item[8] + ',' + item[9],
             'bed': item[10],
@@ -72,26 +65,20 @@ def write_to_file_list(content):
         for item in content:
             f.write(item)
         f.close()
-        # f.write(json.dumps(content) + '\n')
-        # f.write(content)
-        # f.close()
 
 
 def gather_domain_info(startpageNUmber):
     house_info = []
+    i = 0
     with open('domain.csv', 'w') as f:
         for currentPage in range(startpageNUmber):
             currentPage += 1
             print('parsing Page:'+str(currentPage))
             file = get_house(currentPage)
-            # file = open('result.txt', 'r').read()
             results = parse_one_page(file)
-
-            i = 0
 
             for item in results:
                 print(item)
-                # write_to_file(item)
                 house_info.append(item)
                 print('house_info item generated')
                 i += 1
@@ -101,12 +88,7 @@ def gather_domain_info(startpageNUmber):
                     w.writerow(item)
                 else:
                     w.writerow(item)
-
-    # print(house_info)
-    # print(type(house_info))
-    # write_to_file_list(house_info)
     return house_info
 
 
-
-# gather_domain_info(5)
+gather_domain_info(2)

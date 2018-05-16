@@ -7,7 +7,6 @@ import csv
 def parse_one_page(pageNumber, cityName):
 
     url = 'https://www.realestate.com.au/rent/in-' + cityName + ',+vic/list-' + str(pageNumber)
-    # url = 'https://www.realestate.com.au/rent/in-melbourne,+vic/list-' + str(pageNumber)
     page = pq(url= url)
     ariticle = page('article').items()
     for item in ariticle:
@@ -17,11 +16,21 @@ def parse_one_page(pageNumber, cityName):
         find_house_type = re.search('-(.*?)-', house_type_info, re.M).group(1)
         price_info = item.find('p').text()
         find_price = re.search('\$(.*?)\s', price_info, re.M)
-        print(type(find_price))
         if find_price == None:
             # find_price = 99999
-            print('I can accept None price, Ill handle it in views')
+            # print('I can accept None price, Ill handle it in views')
+            pass
         else:
+            # string_to_replace = find_price.group(1)
+            # replaced1 = re.sub(r'\,', '', string_to_replace)
+            # replaced1_1 = re.sub(r'p', '', replaced1)
+            # replaced2 = re.sub(r'w', '', replaced1_1)
+            # replaced3 = 'nothing'
+            #
+            # replaced3 = re.search('\$\w{4}|(\w{3})',replaced2,re.IGNORECASE).group(1)
+            # if replaced3 is None:
+            #     replaced3 = re.search('\$(\w{4})|\$(\w{3})', replaced2, re.IGNORECASE).group(1)
+            # print (string_to_replace+' =====replaced by===== '+str(replaced3))
             find_price = find_price.group(1)
         agent_people_info = item.find('div .agent-wrapper img').attr('alt')
         if agent_people_info != None:
@@ -47,13 +56,10 @@ def parse_one_page(pageNumber, cityName):
         }
 
 
-        # return house_info
-
 
 
 
 def gather_realestate_info(pageNumber, cityName):
-    # currentPage = 0
     house_info = []
     i = 0
     with open('realestate.csv', 'w') as f:
@@ -68,14 +74,12 @@ def gather_realestate_info(pageNumber, cityName):
                 if i == 1:
                     w.writeheader()
                     w.writerow(item)
-                    # print('start')
                 else:
                     w.writerow(item)
-                    # print(i)
 
     return house_info
 
-# gather_realestate_info(100, 'melbourne')
+gather_realestate_info(20, 'melbourne')
 
 
 
