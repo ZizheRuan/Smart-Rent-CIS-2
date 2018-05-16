@@ -20,6 +20,9 @@ h6 {
     font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-weight: 700;
 }
+h1{
+    padding-bottom: 40px;
+}
 
 .topnav {
     font-size: 14px; 
@@ -34,7 +37,8 @@ h6 {
     padding-top: 50px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
     padding-bottom: 50px;
     text-align: center;
-    color: #f8f8f8;
+    /*color: #f8f8f8;*/
+    color: #c4e3f3;
     background: url(../img/school.jpg) no-repeat center center;
     background-size: cover;
 }
@@ -117,7 +121,7 @@ h6 {
 .banner {
     padding: 100px 0;
     color: #f8f8f8;
-    background: url(../img/school.jpg) no-repeat center center;
+    background: url(../img/banner-bg.jpg) no-repeat center center;
     background-size: cover;
 }
 

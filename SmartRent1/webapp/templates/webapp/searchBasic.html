@@ -7,7 +7,7 @@
 <style>
       body{font-family:'Roboto';}
       .listing-box h4{line-height:30px; color:#e55122}
-      .listing-box{background:#f2f4f4; padding:5px; float:left; width:70%; }
+      .listing-box{background:#f2f4f4; padding:20px; float:left; width:70%; }
       .poperty-details-iob {margin:5px 0; padding:8px 0; display:inline-block; border-top:#e5e5e5 1px solid;  border-bottom:#e5e5e5 1px solid;
       width:;}
       .poperty-details-iob li{margin:0; padding:8px 15px; display:inline-block; font-family:'Roboto'; color:#333; border-right:#e5e5e5 1px solid; }
@@ -34,7 +34,6 @@
       .detail:hover{
           background-color: #d4d4d4;
       }
-
 </style>
 
 
@@ -73,6 +72,7 @@
                    <ul class="list-of-ratings">
 
                        <li><br/><strong>Agent Ratings:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</strong><span class="rating-box-iob" id="aratings-{{forloop.counter}}">5</span></li>
+
                        <li><br/><strong>Property Ratings:&nbsp&nbsp</strong><span class="rating-box-iob" id="pratings-{{forloop.counter}}">2</span></li>
                    </ul>
                     <br>
@@ -87,24 +87,17 @@
 </section>
 
                     <script type="text/javascript">
-
                          var loc_rating = "{{resource.property.loc_rating}}";
                          var fac_rating = "{{resource.property.fac_rating}}";
                          var tran_rating ="{{resource.property.tran_rating}}";
                          var index="{{forloop.counter}}";
                          var property_avg = (Number(loc_rating)+Number(fac_rating)+Number(tran_rating))/3;
-
-
                          var fri_rating = "{{resource.agency.fri_rating}}";
                          var res_rating = "{{resource.agency.res_rating}}";
                          var bond_rating ="{{resource.agency.bond_rating}}";
                          var agent_avg = (Number(fri_rating)+Number(res_rating)+Number(bond_rating))/4+index;
-
                          document.getElementById('aratings-{{forloop.counter}}').innerHTML=agent_avg;
                          document.getElementById('pratings-{{forloop.counter}}').innerHTML=property_avg;
-
-
-
                      </script>
 
 

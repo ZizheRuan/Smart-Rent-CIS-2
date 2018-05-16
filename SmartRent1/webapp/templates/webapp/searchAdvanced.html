@@ -1,172 +1,128 @@
 {% extends 'webapp/base.html' %}
 
-{% block title %}Advanced Search Result Page {% endblock %}
+{% block title %}Basic Search Result Page {% endblock %}
 
 {% block body %}
 
 <style>
-    /**** BASE ****/
-body {
-    color: #888;
-}
-a {
-    color: #03a1d1;
-    text-decoration: none!important;
-}
-
-/**** LAYOUT ****/
-.list-inline>li {
-    padding: 0 10px 0 0;
-}
-.container-pad {
-    padding: 30px 15px;
-}
-
-
-/**** MODULE ****/
-.bgc-fff {
-    background-color: #fff!important;
-}
-.box-shad {
-    -webkit-box-shadow: 1px 1px 0 rgba(0,0,0,.2);
-    box-shadow: 1px 1px 0 rgba(0,0,0,.2);
-}
-.brdr {
-    border: 1px solid #ededed;
-}
-
-/* Font changes */
-.fnt-smaller {
-    font-size: .9em;
-}
-.fnt-lighter {
-    color: #bbb;
-}
-
-/* Padding - Margins */
-.pad-10 {
-    padding: 10px!important;
-}
-.mrg-0 {
-    margin: 0!important;
-}
-.btm-mrg-10 {
-    margin-bottom: 10px!important;
-}
-.btm-mrg-20 {
-    margin-bottom: 20px!important;
-}
-
-/* Color  */
-.clr-535353 {
-    color: #535353;
-}
-
-
-
-/**** MEDIA QUERIES ****/
-@media only screen and (max-width: 991px) {
-    #property-listings .property-listing {
-        padding: 5px!important;
-    }
-    #property-listings .property-listing a {
-{#        margin: 0;#}
-        margin: auto;
-    }
-    #property-listings .property-listing .media-body {
-        padding: 10px;
-    }
-}
-
-@media only screen and (min-width: 992px) {
-    #property-listings .property-listing img {
-        max-width: 180px;
-    }
-}
-
-
+      body{font-family:'Roboto';}
+      .listing-box h4{line-height:30px; color:#e55122}
+      .listing-box{background:#f2f4f4; padding:20px; float:left; width:70%; }
+      .poperty-details-iob {margin:5px 0; padding:8px 0; display:inline-block; border-top:#e5e5e5 1px solid;  border-bottom:#e5e5e5 1px solid;
+      width:;}
+      .poperty-details-iob li{margin:0; padding:8px 15px; display:inline-block; font-family:'Roboto'; color:#333; border-right:#e5e5e5 1px solid; }
+      .poperty-details-iob li span{font-size:22px; color:#000;}
+      .listing-box p{font-size:12px; color:#838383;}
+      .list-of-ratings{margin:auto; padding:0; display:block; width:fit-content; float:left; position:relative;}
+      .list-of-ratings li{margin:0; padding:10px 15px 0px 0px; display:block;  width:100%; font-size:16px;}
+      .mr-iob-blr{margin-top:20px;}
+      .listing-box ul li a{color:#e55122;}
+      /*.cls-for-btn-listing{margin:auto; padding:0; display:inline-block; text-align:center; width:100%; margin-top:130px;}*/
+      /*.cls-for-btn-listing li{margin:auto; padding:0; display:inline-block; }*/
+      /*.cls-for-btn-listing li a{margin:auto; padding:10px 15px; display:inline-block; background:#e55122 !important; border-radius:20px; color:#fff !important; }*/
+	  .star-list-iob{margin:16px 0; padding:0; display:block; position:relative; float:right}
+	  .star-list-iob li{margin:0; padding:0 3px; display:block; }
+	  /*.rating-box-iob{background:#e55122; padding:8px; border-radius:5px; position:absolute; color:#fff; right:20px; margin-top:40px;}*/
+      .rating-box-iob{background:#e55122; padding:8px; border-radius:5px;color:#fff; right:20px; margin-top:40px;}
+      #pricetag{color: #03a1d1;font-size: large }
+      .detail{margin:10px; padding:10px 15px; display:inline-block; background-color: #23527c; border-radius:20px; color:#fff !important; float: right}
+      .agentimg{float: left;}
+      .col-md-3{width: 50%;}
+      .agentname{
+          margin: 30px 10px 10px 10px;
+      }
+      .detail:hover{
+          background-color: #d4d4d4;
+      }
 </style>
 
 
 <hr class="intro-divider">
-<div class="container-fluid" style="background-color:#e8e8e8">
-        <div class="container container-pad" id="property-listings">
+<div style="background-color:#e8e8e8">
+
+{% for resource in result_advanced  %}
+ <section class="listing-page-builing">
+      <div class="container">
+         <div class="row">
+            <div class="listing-box">
+
+               <div class="col-lg-5 col-md-6 mr-iob-blr">
+
+                   <img alt="image" class="img-responsive" src="{{ resource.property.house_img }}">
+
+                   <hr>
+
+				</div>
+
+
+               <div class="col-md-6">
+                  <h4><strong>{{ resource.property.address }}</strong><br/>
+                  </h4>
+                  <ul class="poperty-details-iob">
+                      <li id="pricetag">${{ resource.price }}</li>
+                      <li>{{ resource.property.no_bed }}  <i class="fa fa-bed" style="font-size:24px"></i></li>
+                      <li>{{ resource.property.no_bath }}  <i class="fa fa-bath" style="font-size:24px"></i></li>
+                      <br> <img class="agentimg img-circle img-responsive" src="{{resource.agency.agent_img}}"  width="30%" height="30%" >
+                      <p class="agentname">{{resource.agency.name}}</p>
+                      <li></li>
+                  </ul>
+
+
+                   <br>
+                   <ul class="list-of-ratings">
+
+                       <li><br/><strong>Agent Ratings:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</strong><span class="rating-box-iob" id="aratings-{{forloop.counter}}">5</span></li>
+                       <li><br/><strong>Property Ratings:&nbsp&nbsp</strong><span class="rating-box-iob" id="pratings-{{forloop.counter}}">2</span></li>
+                       <li id="showdistance-{{forloop.counter}}"><strong>Distance to <span id="uniname-{{forloop.counter}}" >Uni</span> <span id="distance-{{forloop.counter}}">1000m</span>m </strong></li>
+                   </ul>
+                    <br>
+                    <a href="{% url 'webapp:detail' resource.id %}" class="detail" role="button">View Detail</a>
+                  <br>
+               </div>
+
+
+            </div>
+         </div>
+      </div>
+</section>
+
+                    <script type="text/javascript">
+
+                         var uni = "{{uniName}}";
+                         console.log(uni);
+                         document.getElementById("uniname-{{forloop.counter}}").innerHTML= uni;
+                         if(uni ==="RMIT University"){
+                             var distance1 = "{{resource.property.distance_rmit}}";
+                             console.log("{{resource.property.distance_rmit}}");
+                             document.getElementById("distance-{{forloop.counter}}").innerHTML=distance1;
+                         }else if(uni === "University of Melbourne"){
+                             var distance2 = "{{resource.property.distance_umel}}";
+                             document.getElementById("distance-{{forloop.counter}}").innerHTML=distance2;
+                         }else{
+                             document.getElementById("showdistance-{{forloop.counter}}").style.display = "none";
+                         }
+
+                         var loc_rating = "{{resource.property.loc_rating}}";
+                         var fac_rating = "{{resource.property.fac_rating}}";
+                         var tran_rating ="{{resource.property.tran_rating}}";
+                         var index="{{forloop.counter}}";
+                         var property_avg = (Number(loc_rating)+Number(fac_rating)+Number(tran_rating))/3;
+                         var fri_rating = "{{resource.agency.fri_rating}}";
+                         var res_rating = "{{resource.agency.res_rating}}";
+                         var bond_rating ="{{resource.agency.bond_rating}}";
+                         var agent_avg = (Number(fri_rating)+Number(res_rating)+Number(bond_rating))/4+index;
+                         document.getElementById('aratings-{{forloop.counter}}').innerHTML=agent_avg;
+                         document.getElementById('pratings-{{forloop.counter}}').innerHTML=property_avg;
+                     </script>
+
+
+<hr>
 
 
 
+{% endfor %}
 
-            <div class="row">
-                <div class="col-lg-6 col-sm-6">
-
-                    {% for resource in result_advanced  %}
-                                            <!-- Begin Listing: 609 W GRAVERS LN-->
-                    <div class="brdr bgc-fff pad-10 box-shad btm-mrg-20 property-listing">
-                        <div class="media">
-                            <a class="pull-left" href="#" target="_parent">
-                            <img alt="image" class="img-responsive" src="{{ resource.property.house_img }}"></a>
-
-                            <div class="clearfix visible-sm"></div>
-
-                            <div class="media-body fnt-smaller">
-                                <a href="#" target="_parent"></a>
-
-                                <h4 class="media-heading">
-                                  <a href="#" target="_parent">${{ resource.price }} <small class="pull-right">{{ resource.property.address }}</small></a></h4>
-
-
-                                <ul class="list-inline mrg-0 btm-mrg-10 clr-535353">
-
-
-                                    <li>{{ resource.property.no_bed }}  Beds</li>
-
-                                    <li style="list-style: none">|</li>
-
-                                    <li>{{ resource.property.no_bath }}  Baths</li>
-
-                                    <li style="list-style: none">|</li>
-
-                                    <li>Agent: {{ resource.agency.name }}</li>
-
-
-                                </ul>
-
-                            </div>
-
-                            <div>
-                                <p>Property Ratings: {{resource.property.loc_rating  }}</p>
-                                <p>Agent Ratings: {{resource.agency.fri_rating  }}</p>
-                            </div>
-
-
-                            <hr>
-
-                            <button class="btn-danger" name="{{ resource.property.address }}"> Detail</button>
-{#                            todo select serach result, and go to the detail page#}
-{#                            <a href="{% url 'webapp:detail' resource.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>#}
-                        </div>
-                    </div><!-- End Listing-->
-
-
-                    {% endfor %}
-
-
-
-
-
-
-
-
-
-
-                </div>
-
-
-
-            </div><!-- End row -->
-
-
-        </div><!-- End container -->
-
+</div>
 
 
 {% endblock %}
