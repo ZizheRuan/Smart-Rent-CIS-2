@@ -17,4 +17,5 @@ urlpatterns = [
     path('query/', views.queryTable, name='showQuery'),
     path('<int:id>/',views.detailView,name='detail'),
     path('update-rating/', views.updateView, name='update'),
+    path('exportCSV/', views.exportCSV, name='exportCSV'),
 ]

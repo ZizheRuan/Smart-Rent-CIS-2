@@ -80,18 +80,34 @@ def search_advanced(request):
             'maxPrice': request.POST['max-price'],
             'bedNum': request.POST['bed-num']
         }
+        if advanced_input['houseType'] == 'any':
+            if advanced_input['uniName'] == 'University of Melbourne':
+                result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related(
+                    'property').filter(
+                    property__no_bed__exact=advanced_input['bedNum']).filter(
+                    property__distance_umel__lt=10000).select_related('agency').order_by('property__distance_umel')
 
-        if advanced_input['uniName'] == 'University of Melbourne' :
-            result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
-                property__no_bed__exact=advanced_input['bedNum']).filter(property__distance_umel__lt=10000).select_related('agency').order_by('property__distance_umel')
-
-        elif advanced_input['uniName'] == 'RMIT University' :
-            result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
-                property__no_bed__exact=advanced_input['bedNum']).filter(property__distance_rmit__lt=10000).select_related('agency').order_by('property__distance_rmit')
-
+            elif advanced_input['uniName'] == 'RMIT University':
+                result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related(
+                    'property').filter(
+                    property__no_bed__exact=advanced_input['bedNum']).filter(
+                    property__distance_rmit__lt=10000).select_related('agency').order_by('property__distance_rmit')
+            else:
+                result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related(
+                    'property').filter(
+                    property__no_bed__exact=advanced_input['bedNum']).select_related('agency').order_by('price')
         else:
-            result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
-                property__no_bed__exact=advanced_input['bedNum']).select_related('agency').order_by('price')
+            if advanced_input['uniName'] == 'University of Melbourne' :
+                result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
+                    property__no_bed__exact=advanced_input['bedNum']).filter(property__distance_umel__lt=10000).select_related('agency').order_by('property__distance_umel')
+
+            elif advanced_input['uniName'] == 'RMIT University' :
+                result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
+                    property__no_bed__exact=advanced_input['bedNum']).filter(property__distance_rmit__lt=10000).select_related('agency').order_by('property__distance_rmit')
+
+            else:
+                result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
+                    property__no_bed__exact=advanced_input['bedNum']).select_related('agency').order_by('price')
 
         print(result_advanced)
         for each in result_advanced:
@@ -262,3 +278,18 @@ def updateView(request):
 
 
 
+import csv
+from django.http import HttpResponse
+
+def exportCSV(request):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="csvForDistance.csv"'
+
+    writer = csv.writer(response)
+    for i in range(14824,15909):
+        property_to_write = Property.objects.get(pk=i)
+        writer.writerow([i, property_to_write.address])
+        print('object No.'+str(i)+'has been saved')
+    print('writting finished')
+    return response
