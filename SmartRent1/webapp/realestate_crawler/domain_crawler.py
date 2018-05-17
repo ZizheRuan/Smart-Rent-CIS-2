@@ -16,7 +16,7 @@ def parse_one_page(html):
         + '.*?images":\["(.*?)"'
         + '.*?price":"(\$.*?)"'
         + '.*?brandName":"(.*?)"'
-        + '.*?agentPhoto":(.*?),'
+        + '.*?agentPhoto":"(.*?)",'
         + '.*?agentName":"(.*?)"'
         + '.*?address":{"street":"(.*?)"'
         + '.*?suburb":"(.*?)"'
@@ -68,6 +68,8 @@ def write_to_file_list(content):
 
 
 def gather_domain_info(startpageNUmber):
+    if startpageNUmber >= 12:
+        startpageNUmber = 11
     house_info = []
     i = 0
     with open('domain.csv', 'w') as f:
@@ -91,4 +93,4 @@ def gather_domain_info(startpageNUmber):
     return house_info
 
 
-gather_domain_info(2)
+# gather_domain_info(1)
