@@ -1,186 +1,196 @@
 {% extends 'webapp/base.html' %}
-{#{% block titile %}{{ resource }}{% endblock %}#}
 
+{% block title %}Detail Page {% endblock %}
 
 {% block body %}
-
 <style>
-.gallery-wrap .img-big-wrap img {
-    height: 450px;
-    width: auto;
-    display: inline-block;
-    cursor: zoom-in;
-}
+    .jumbotron {
+        height: 30%;
+        width: 75%;
+    }
 
+    #headimg {
+        max-width: 100%;
+        max-height: 100%;
+    }
 
-.gallery-wrap .img-small-wrap .item-gallery {
-    width: 60px;
-    height: 60px;
-    border: 1px solid #ddd;
-    margin: 7px 2px;
-    display: inline-block;
-    overflow: hidden;
-}
+    button {
+        margin-top: 20px;
+        margin-left: 20px;
+        margin-bottom: 20px;
+    }
 
-.gallery-wrap .img-small-wrap {
-    text-align: center;
-}
-.gallery-wrap .img-small-wrap img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: cover;
-    border-radius: 4px;
-    cursor: zoom-in;
-}
+    .poperty-details-iob li {
+        margin: 0;
+        padding: 8px 15px;
+        display: inline-block;
+        font-family: 'Roboto';
+        color: #333;
+        border-right: #e5e5e5 1px solid;
+    }
 
+    .poperty-details-iob li span {
+        font-size: 22px;
+        color: #000;
+    }
+
+    #pricetag {
+        color: #985f0d;
+        font-size: large;
+    }
+
+    .agent {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        -webkit-transform: translateX(-50%);
+        align-content: center;
+    }
+
+    .headq {
+        position: relative;
+    }
+
+    .original:hover{
+        background-color: #d4d4d4;
+    }
+
+    .original{margin:10px; padding:10px 15px; display:inline-block; background-color: #23527c; border-radius:20px; color:#fff !important; float: right}
 
 
 </style>
 
-<hr class="divider">
-
+<link href="narrow-jumbotron.css" rel="stylesheet">
 <div class="container">
 
-<div class="card">
-	<div class="row">
-		<aside class="col-sm-5 border-right">
 
-<article class="gallery-wrap">
-<div class="img-big-wrap">
-  <div> <a href="#"><img src="{{resource.property.house_img }}" class="img-responsive"></a></div>
-</div> <!-- slider-product.// -->
-</article> <!-- gallery-wrap .end// -->
-		</aside>
-		<aside class="col-sm-7">
+    <div class="jumbotron">
 
-<article class="card-body p-5">
+        <h4 class="display-3">{{resource.property.address}}</h4>
+        <div class="row marketing headq">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <img id="headimg" src="{{resource.property.house_img }}" class="img-responsive">
 
+                <ul class="poperty-details-iob">
+                    <li id="pricetag">${{ resource.price }}/Week</li>
+                    <li>{{ resource.property.no_bed }} <i class="fa fa-bed" style="font-size:24px"></i></li>
+                    <li>{{ resource.property.no_bath }} <i class="fa fa-bath" style="font-size:24px"></i></li>
+                    <li></li>
+                </ul>
+            </div>
 
-
-<h3 class="title mb-3">{{ resource.property.address }}</h3>
-
-<p class="price-detail-wrap">
-	<span class="price h3 text-warning">
-		<span class="currency">AUD $</span><span class="num">{{ resource.price }}</span>
-	</span>
-	<span>/Week</span>
-</p> <!-- price-detail-wrap .// -->
-
-<dl class="param param-feature">
-  <dt>Bedroom Num</dt>
-  <dd>{{ resource.property.no_bed }}</dd>
-</dl>  <!-- item-property-hor .// -->
-
-<dl class="param param-feature">
-  <dt>Bathroom Num</dt>
-  <dd>{{ resource.property.no_bath }}</dd>
-</dl>  <!-- item-property-hor .// -->
-
-<dl class="param param-feature">
-  <dt>Location Ratings</dt>
-  <dd>{{ resource.property.loc_rating }}</dd>
-</dl>  <!-- item-property-hor .// -->
-
-<dl class="param param-feature">
-  <dt>Facility Ratings</dt>
-  <dd>{{ resource.property.fac_rating }}</dd>
-</dl>  <!-- item-property-hor .// -->
-
-<dl class="param param-feature">
-  <dt>Transpor Ratings</dt>
-  <dd>{{ resource.property.tran_rating }}</dd>
-</dl>  <!-- item-property-hor .// -->
-<dl class="param param-feature">
-  <dt>Comment</dt>
-  <dd>{{ resource.property.comment }}</dd>
-</dl>  <!-- item-property-hor .// -->
-
-{#below are agent info and ratings#}
-<dl class="param param-feature">
-  <dt>Agent Name</dt>
-  <dd>{{ resource.agency.name }}</dd>
-</dl>  <!-- item-property-hor .// -->
-
-<dl class="param param-feature">
-  <dt>Agent Company</dt>
-  <dd>{{ resource.agency.company }}</dd>
-</dl>  <!-- item-property-hor .// -->
-
-<dl class="param param-feature">
-  <dt>Friendly</dt>
-  <dd>{{ resource.agency.fri_rating }}</dd>
-</dl>  <!-- item-property-hor .// -->
-
-<dl class="param param-feature">
-  <dt>Response</dt>
-  <dd>{{ resource.agency.res_rating }}</dd>
-</dl>  <!-- item-property-hor .// -->
-
-<dl class="param param-feature">
-  <dt>Bond Refund</dt>
-  <dd>{{ resource.agency.bond_rating }}</dd>
-</dl>  <!-- item-property-hor .// -->
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="agent">
+                    <img class="agentimg img-circle img-responsive" src="{{resource.agency.agent_img}}" width="60%"
+                         height="60%">
+                    <p class="agentname ">{{resource.agency.name}}</p>
+                    <br>
+                    <br>
+                    <a href="{{ resource.link }}" class="original" role="button">More Info</a>
+                </div>
 
 
-
-<hr>
-
-<form method="post" action="/webapp/update-rating/">
-    {% csrf_token %}
-    {#Property Rating Section   #}
-    <div class="container">
-        <div class="row lead">
-            <p>Rate the Location</p>
-            <input name="loc-rating" type="number" value="" min="0" max="5">
+            </div>
         </div>
+        <!--<img id="headimg" src="{{resource.property.house_img }}" class="img-responsive">-->
 
-        <div class="row lead">
-            <p>Rate the facility</p>
-            <input name="fac-rating" type="number" value="" min="0" max="5">
-        </div>
+        <!--<ul class="poperty-details-iob">-->
+        <!--<li id="pricetag">${{ resource.price }}/Week</li>-->
+        <!--<li>{{ resource.property.no_bed }} <i class="fa fa-bed" style="font-size:24px"></i></li>-->
+        <!--<li>{{ resource.property.no_bath }} <i class="fa fa-bath" style="font-size:24px"></i></li>-->
+        <!--<li></li>-->
+        <!--</ul>-->
 
-        <div class="row lead">
-            <p>Rate the Transport</p>
-            <input name="tran-rating" type="number" value="" min="0" max="5">
-        </div>
 
     </div>
 
-    {#Agent Rating Section#}
-    <div class="container">
-        <div class="row lead">
-            <p>Rate the friendliness</p>
-            <input name="fri-rating" type="number" value="" min="0" max="5">
+    <div class="row marketing">
+        <div class="col-lg-6 col-md-4 col-sm-4">
+            <dl class="param param-feature">
+                <dt>Location Ratings</dt>
+                <dd>{{ resource.property.loc_rating }}</dd>
+            </dl>  <!-- item-property-hor .// -->
+
+            <dl class="param param-feature">
+                <dt>Facility Ratings</dt>
+                <dd>{{ resource.property.fac_rating }}</dd>
+            </dl>  <!-- item-property-hor .// -->
+
+            <dl class="param param-feature">
+                <dt>Transpor Ratings</dt>
+                <dd>{{ resource.property.tran_rating }}</dd>
+            </dl>  <!-- item-property-hor .// -->
+
         </div>
 
-        <div class="row lead">
-            <p>Rate the Response Rate</p>
-            <input name="res-rating" type="number" value="" min="0" max="5">
-        </div>
+        <div class="col-lg-6 col-md-4 col-sm-4">
+            <dl class="param param-feature">
+                <dt>Friendly</dt>
+                <dd>{{ resource.agency.fri_rating }}</dd>
+            </dl>  <!-- item-property-hor .// -->
 
-        <div class="row lead">
-            <p>Rate the Bond Refund </p>
-            <input name="bond-rating" type="number" value="" min="0" max="5">
+            <dl class="param param-feature">
+                <dt>Response</dt>
+                <dd>{{ resource.agency.res_rating }}</dd>
+            </dl>  <!-- item-property-hor .// -->
+
+            <dl class="param param-feature">
+                <dt>Bond Refund</dt>
+                <dd>{{ resource.agency.bond_rating }}</dd>
+            </dl>  <!-- item-property-hor .// -->
+
+
         </div>
+    </div>
+
+    <hr>
+
+    <!--rating section-->
+    <div class="row marketing">
+
+        <form method="post" action="/webapp/update-rating/">
+            {% csrf_token %}
+            <!--property ratings-->
+            <div class="col-lg-6 col-md-4 col-sm-4">
+                <p>Rate the Location</p>
+                <input name="loc-rating" type="number" value="" min="0" max="5">
+
+                <p>Rate the facility</p>
+                <input name="fac-rating" type="number" value="" min="0" max="5">
+
+
+                <p>Rate the Transport</p>
+                <input name="tran-rating" type="number" value="" min="0" max="5">
+            </div>
+            <!--agent ratings-->
+            <div class="col-lg-6 col-md-4 col-sm-4">
+                <p>Rate the friendliness</p>
+                <input name="fri-rating" type="number" value="" min="0" max="5">
+
+
+                <p>Rate the Response Rate</p>
+                <input name="res-rating" type="number" value="" min="0" max="5">
+
+
+                <p>Rate the Bond Refund </p>
+                <input name="bond-rating" type="number" value="" min="0" max="5">
+
+            </div>
+
+            <input type="hidden" name="resource-id" value="{{resource.id}}">
+
+            <button type="submit" value="Submit">
+                <span class="glyphicon glyphicon-user">Submit</span>
+            </button>
+
+
+        </form>
+
 
     </div>
 
-    <input type="hidden" name="resource-id" value="{{resource.id}}">
 
-    <button type="submit" value="Submit">
-        <span class="glyphicon glyphicon-user">Submit</span>
-    </button>
+</div> <!-- /container -->
 
 
-
-</form>
-
-
-<!--container.//-->
-
-</article>
-        </aside>
-        </div>
-    </div>
-</div>
 {% endblock %}
