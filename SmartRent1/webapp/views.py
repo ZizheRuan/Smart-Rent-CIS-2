@@ -17,24 +17,6 @@ def indexView(request):
     template_name = "webapp/index.html"
     return render(request,template_name)
 
-def getData(request):
-    print('hahahha')
-    data = real_estate_crawler.gather_information(1, 'melbourne')
-    page = data[0]
-    agent_name = page['agent']
-    agent_img = page['agentPic']
-    house_type = page['houseType']
-    original_link = page['urlDetail']
-    house_img = page['housePic']
-    price = page['price']
-    location = page['location']
-    bed = page['bed']
-    bath = page['bathroom']
-    showDataTemplate='webapp/showData.html'
-    return render(request, showDataTemplate, {'page': page, 'agent_name': agent_name, 'agent_img': agent_img, 'house_type': house_type,
-                                              'original_link': original_link, 'house_img': house_img, 'price': price,
-                                              'location': location, 'bed': bed, 'bath': bath})
-
 
 def search_basic(request):
     if request.POST:
@@ -121,6 +103,7 @@ def search_advanced(request):
         # return render(request,searchResultTemplate,{'advanced_input':advanced_input})
         return render(request, searchResultTemplate, {'result_advanced': result_advanced, 'uniName': advanced_input['uniName']})
 
+
 def saveToTable(request) :
     print('save to table function begin')
     # crawled_info = real_estate_crawler.gather_realestate_info(150, 'melbourne')
@@ -206,33 +189,15 @@ def saveToTable(request) :
     showResultTemplate = 'webapp/showResult.html'
     return render(request, showResultTemplate, {'crawled_info':crawled_info})
 
-def queryTable(request):
-    # rr = Resource.objects.filter(price__lt=500)
-
-    # ---------------------------------
-    # rr = Resource.objects.filter(price__lt=500).select_related('property').select_related('agency').filter(propertyproperty__no_bed__exact=2)
-    # print(rr)
-    # for each in rr:
-    #     print(each.price +'   ' + str(each.property.no_bed))
-    # ---------------------------------
-
-    # rr_filtered = rr.values()
-    # print(rr_filtered)
-    # for eachrr in rr:
-    #     eachpp = eachrr.property_set.all()
-    #     print(eachpp)
-    # ppReady = pp.filter(address__contains='1').filter(no_bed__contains='2')
-    # print(ppReady)
-    showQuery = 'webapp/showQuery.html'
-    return render(request, showQuery)
-
 
 def aboutView(request):
     return render(request,'webapp/about.html')
 
+
 def detailView(request,id):
     resource = get_object_or_404(Resource,pk=id)
     return render(request,'webapp/detail.html',{'resource':resource})
+
 
 def updateView(request):
     if request.POST:
@@ -275,7 +240,6 @@ def updateView(request):
         print(ratings)
 
         return render(request,'webapp/updateRatings.html',{'ratings':ratings})
-
 
 
 import csv
