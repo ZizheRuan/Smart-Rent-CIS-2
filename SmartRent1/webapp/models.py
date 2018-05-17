@@ -13,6 +13,8 @@ class Property(models.Model):
     house_type = models.CharField(max_length=20, blank=True)
     distance_umel = models.IntegerField(blank=True)
     distance_rmit = models.IntegerField(blank=True)
+    duration_umel = models.IntegerField(blank=True)
+    duration_rmit = models.IntegerField(blank=True)
 
     def __str__(self):
         return self.address
@@ -34,7 +36,7 @@ class Resource(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE)
     agency = models.ForeignKey(Agency, on_delete=models.CASCADE)
     link = models.URLField(max_length=200)
-    price = models.CharField(max_length=20, null=True)
+    price = models.IntegerField(blank=True, null=True)
 
     # def __str__(self):
     #     return 'Address: %s. || Agency: %s. || Price: %s.' % (self.property, self.agency, self.price)

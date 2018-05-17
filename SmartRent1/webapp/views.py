@@ -46,9 +46,6 @@ def search_basic(request):
             uniName = 'Any'
 
         # result_basic = result_basic.distinct(result_basic,result_basic.property.address)
-        for each in result_basic:
-            print(each.price + '   ' + str(each.property.no_bed)+ '   ' +' Distance-umel: '+str(each.property.distance_umel)
-                  +' Distance-rmit: '+str(each.property.distance_rmit)+' Uni: '+uniName)
 
         searchResultTemplate = 'webapp/searchBasic.html'
         return render(request, searchResultTemplate, {'result_basic': result_basic, 'uniName': uniName})
@@ -92,9 +89,6 @@ def search_advanced(request):
                     property__no_bed__exact=advanced_input['bedNum']).select_related('agency').order_by('price')
 
         print(result_advanced)
-        for each in result_advanced:
-            print(each.price + '   ' + str(each.property.no_bed)+'   ' + str(each.property.house_type)+' Distance-umel: '+str(each.property.distance_umel)
-                  +' Distance-rmit: '+str(each.property.distance_rmit)+ ' Uni: '+ advanced_input['uniName'])
 
         print('***************')
         print(advanced_input)
@@ -106,7 +100,7 @@ def search_advanced(request):
 
 def saveToTable(request) :
     print('save to table function begin')
-    # crawled_info = real_estate_crawler.gather_realestate_info(150, 'melbourne')
+    # crawled_info = real_estate_crawler.gather_realestate_info(150)
     crawled_info = domain_crawler.gather_domain_info(47)
     print('crawling finished')
     size = len(crawled_info)
@@ -128,7 +122,7 @@ def saveToTable(request) :
                                                                                         or (
                         feature['agentPic'] is None)or(feature['agentPic']=='null')or(feature['agentCompany'] is None)or(feature['urlDetail'] is None)
                                                                                         or (
-                                    feature['price'] == '99999')or(feature['price'] is None)) is True:
+                                    feature['price'] == '99999')or(feature['price'] is None)or(feature['price'] == '')) is True:
             print('failure found')
             continue
         print('success found No.'+str(i))
@@ -150,8 +144,12 @@ def saveToTable(request) :
         random.seed(a=None, version=2)
         random1 = random.randint(200,10000)
         random2 = random.randint(200,10000)
+        random3 = random.randint(15,95)
+        random4 = random.randint(15,95)
         pList[i].distance_umel = random1
         pList[i].distance_rmit = random2
+        pList[i].duration_umel = random3
+        pList[i].duration_rmit = random4
         pList[i].save()
 
         aList[i].name = feature['agentPeople']
@@ -168,7 +166,7 @@ def saveToTable(request) :
         rList[i].agency = aList[i]
         rList[i].link = feature['urlDetail']
         # ===================================================
-        rList[i].price = feature['price']
+        rList[i].price = int(feature['price'])
 
         # ===================================================
         # replaced1 = re.sub(r'\,', '', feature['price'])
