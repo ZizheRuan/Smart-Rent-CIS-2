@@ -110,6 +110,9 @@ def saveToTable(request) :
     i = 0
     # i = 574
     # for i in range(0, size):
+
+    existed = []
+
     for feature in crawled_info:
         # print('loop begin')
         # feature = crawled_info[i]
@@ -125,6 +128,16 @@ def saveToTable(request) :
                                     feature['price'] == '99999')or(feature['price'] is None)or(feature['price'] == '')) is True:
             print('failure found')
             continue
+
+
+        elif feature['location'] not in existed:
+            existed.append(feature['location'])
+            print ('True')
+        else:
+            print('False')
+            continue
+
+
         print('success found No.'+str(i))
         pList.append(Property())
         aList.append(Agency())
