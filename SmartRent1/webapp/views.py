@@ -17,24 +17,6 @@ def indexView(request):
     template_name = "webapp/index.html"
     return render(request,template_name)
 
-def getData(request):
-    print('hahahha')
-    data = real_estate_crawler.gather_information(1, 'melbourne')
-    page = data[0]
-    agent_name = page['agent']
-    agent_img = page['agentPic']
-    house_type = page['houseType']
-    original_link = page['urlDetail']
-    house_img = page['housePic']
-    price = page['price']
-    location = page['location']
-    bed = page['bed']
-    bath = page['bathroom']
-    showDataTemplate='webapp/showData.html'
-    return render(request, showDataTemplate, {'page': page, 'agent_name': agent_name, 'agent_img': agent_img, 'house_type': house_type,
-                                              'original_link': original_link, 'house_img': house_img, 'price': price,
-                                              'location': location, 'bed': bed, 'bath': bath})
-
 
 def search_basic(request):
     if request.POST:
@@ -48,25 +30,22 @@ def search_basic(request):
         if match_umel:
             print('match_umel')
             result_basic = Resource.objects.filter(property__distance_umel__lt=10000).order_by(
-                'property__distance_umel').select_related(
+                'property__distance_umel', '-property__no_bed', '-property__no_bath').select_related(
                 'property').select_related('agency')
             uniName = 'University of Melbourne'
         elif match_rmit:
             print('match_rmit')
             result_basic = Resource.objects.filter(property__distance_rmit__lt=10000).order_by(
-                'property__distance_rmit').select_related(
+                'property__distance_rmit', '-property__no_bed', '-property__no_bath').select_related(
                 'property').select_related('agency')
             uniName = 'RMIT University'
         else:
             print('match_other')
             result_basic = Resource.objects.filter(property__address__contains=str(searhInput)).select_related(
-                'property').select_related('agency').order_by('price')
+                'property').select_related('agency').order_by('price', '-property__no_bed', '-property__no_bath')
             uniName = 'Any'
 
         # result_basic = result_basic.distinct(result_basic,result_basic.property.address)
-        for each in result_basic:
-            print(each.price + '   ' + str(each.property.no_bed)+ '   ' +' Distance-umel: '+str(each.property.distance_umel)
-                  +' Distance-rmit: '+str(each.property.distance_rmit)+' Uni: '+uniName)
 
         searchResultTemplate = 'webapp/searchBasic.html'
         return render(request, searchResultTemplate, {'result_basic': result_basic, 'uniName': uniName})
@@ -85,34 +64,31 @@ def search_advanced(request):
                 result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related(
                     'property').filter(
                     property__no_bed__exact=advanced_input['bedNum']).filter(
-                    property__distance_umel__lt=10000).select_related('agency').order_by('property__distance_umel')
+                    property__distance_umel__lt=10000).select_related('agency').order_by('property__distance_umel', '-property__no_bed', '-property__no_bath')
 
             elif advanced_input['uniName'] == 'RMIT University':
                 result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related(
                     'property').filter(
                     property__no_bed__exact=advanced_input['bedNum']).filter(
-                    property__distance_rmit__lt=10000).select_related('agency').order_by('property__distance_rmit')
+                    property__distance_rmit__lt=10000).select_related('agency').order_by('property__distance_rmit', '-property__no_bed', '-property__no_bath')
             else:
                 result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related(
                     'property').filter(
-                    property__no_bed__exact=advanced_input['bedNum']).select_related('agency').order_by('price')
+                    property__no_bed__exact=advanced_input['bedNum']).select_related('agency').order_by('price', '-property__no_bed', '-property__no_bath')
         else:
             if advanced_input['uniName'] == 'University of Melbourne' :
                 result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
-                    property__no_bed__exact=advanced_input['bedNum']).filter(property__distance_umel__lt=10000).select_related('agency').order_by('property__distance_umel')
+                    property__no_bed__exact=advanced_input['bedNum']).filter(property__distance_umel__lt=10000).select_related('agency').order_by('property__distance_umel', '-property__no_bed', '-property__no_bath')
 
             elif advanced_input['uniName'] == 'RMIT University' :
                 result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
-                    property__no_bed__exact=advanced_input['bedNum']).filter(property__distance_rmit__lt=10000).select_related('agency').order_by('property__distance_rmit')
+                    property__no_bed__exact=advanced_input['bedNum']).filter(property__distance_rmit__lt=10000).select_related('agency').order_by('property__distance_rmit', '-property__no_bed', '-property__no_bath')
 
             else:
                 result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
-                    property__no_bed__exact=advanced_input['bedNum']).select_related('agency').order_by('price')
+                    property__no_bed__exact=advanced_input['bedNum']).select_related('agency').order_by('price', '-property__no_bed', '-property__no_bath')
 
         print(result_advanced)
-        for each in result_advanced:
-            print(each.price + '   ' + str(each.property.no_bed)+'   ' + str(each.property.house_type)+' Distance-umel: '+str(each.property.distance_umel)
-                  +' Distance-rmit: '+str(each.property.distance_rmit)+ ' Uni: '+ advanced_input['uniName'])
 
         print('***************')
         print(advanced_input)
@@ -121,9 +97,10 @@ def search_advanced(request):
         # return render(request,searchResultTemplate,{'advanced_input':advanced_input})
         return render(request, searchResultTemplate, {'result_advanced': result_advanced, 'uniName': advanced_input['uniName']})
 
+
 def saveToTable(request) :
     print('save to table function begin')
-    # crawled_info = real_estate_crawler.gather_realestate_info(150, 'melbourne')
+    # crawled_info = real_estate_crawler.gather_realestate_info(150)
     crawled_info = domain_crawler.gather_domain_info(47)
     print('crawling finished')
     size = len(crawled_info)
@@ -133,6 +110,9 @@ def saveToTable(request) :
     i = 0
     # i = 574
     # for i in range(0, size):
+
+    existed = []
+
     for feature in crawled_info:
         # print('loop begin')
         # feature = crawled_info[i]
@@ -145,9 +125,19 @@ def saveToTable(request) :
                                                                                         or (
                         feature['agentPic'] is None)or(feature['agentPic']=='null')or(feature['agentCompany'] is None)or(feature['urlDetail'] is None)
                                                                                         or (
-                                    feature['price'] == '99999')or(feature['price'] is None)) is True:
+                                    feature['price'] == '99999')or(feature['price'] is None)or(feature['price'] == '')) is True:
             print('failure found')
             continue
+
+
+        elif feature['location'] not in existed:
+            existed.append(feature['location'])
+            print ('True')
+        else:
+            print('False')
+            continue
+
+
         print('success found No.'+str(i))
         pList.append(Property())
         aList.append(Agency())
@@ -167,8 +157,12 @@ def saveToTable(request) :
         random.seed(a=None, version=2)
         random1 = random.randint(200,10000)
         random2 = random.randint(200,10000)
+        random3 = random.randint(15,95)
+        random4 = random.randint(15,95)
         pList[i].distance_umel = random1
         pList[i].distance_rmit = random2
+        pList[i].duration_umel = random3
+        pList[i].duration_rmit = random4
         pList[i].save()
 
         aList[i].name = feature['agentPeople']
@@ -185,7 +179,7 @@ def saveToTable(request) :
         rList[i].agency = aList[i]
         rList[i].link = feature['urlDetail']
         # ===================================================
-        rList[i].price = feature['price']
+        rList[i].price = int(feature['price'])
 
         # ===================================================
         # replaced1 = re.sub(r'\,', '', feature['price'])
@@ -206,33 +200,15 @@ def saveToTable(request) :
     showResultTemplate = 'webapp/showResult.html'
     return render(request, showResultTemplate, {'crawled_info':crawled_info})
 
-def queryTable(request):
-    # rr = Resource.objects.filter(price__lt=500)
-
-    # ---------------------------------
-    # rr = Resource.objects.filter(price__lt=500).select_related('property').select_related('agency').filter(propertyproperty__no_bed__exact=2)
-    # print(rr)
-    # for each in rr:
-    #     print(each.price +'   ' + str(each.property.no_bed))
-    # ---------------------------------
-
-    # rr_filtered = rr.values()
-    # print(rr_filtered)
-    # for eachrr in rr:
-    #     eachpp = eachrr.property_set.all()
-    #     print(eachpp)
-    # ppReady = pp.filter(address__contains='1').filter(no_bed__contains='2')
-    # print(ppReady)
-    showQuery = 'webapp/showQuery.html'
-    return render(request, showQuery)
-
 
 def aboutView(request):
     return render(request,'webapp/about.html')
 
+
 def detailView(request,id):
     resource = get_object_or_404(Resource,pk=id)
     return render(request,'webapp/detail.html',{'resource':resource})
+
 
 def updateView(request):
     if request.POST:
@@ -275,7 +251,6 @@ def updateView(request):
         print(ratings)
 
         return render(request,'webapp/updateRatings.html',{'ratings':ratings})
-
 
 
 import csv
