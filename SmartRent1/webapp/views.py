@@ -30,19 +30,19 @@ def search_basic(request):
         if match_umel:
             print('match_umel')
             result_basic = Resource.objects.filter(property__distance_umel__lt=10000).order_by(
-                'property__distance_umel').select_related(
+                'property__distance_umel', '-property__no_bed', '-property__no_bath').select_related(
                 'property').select_related('agency')
             uniName = 'University of Melbourne'
         elif match_rmit:
             print('match_rmit')
             result_basic = Resource.objects.filter(property__distance_rmit__lt=10000).order_by(
-                'property__distance_rmit').select_related(
+                'property__distance_rmit', '-property__no_bed', '-property__no_bath').select_related(
                 'property').select_related('agency')
             uniName = 'RMIT University'
         else:
             print('match_other')
             result_basic = Resource.objects.filter(property__address__contains=str(searhInput)).select_related(
-                'property').select_related('agency').order_by('price')
+                'property').select_related('agency').order_by('price', '-property__no_bed', '-property__no_bath')
             uniName = 'Any'
 
         # result_basic = result_basic.distinct(result_basic,result_basic.property.address)
@@ -64,29 +64,29 @@ def search_advanced(request):
                 result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related(
                     'property').filter(
                     property__no_bed__exact=advanced_input['bedNum']).filter(
-                    property__distance_umel__lt=10000).select_related('agency').order_by('property__distance_umel')
+                    property__distance_umel__lt=10000).select_related('agency').order_by('property__distance_umel', '-property__no_bed', '-property__no_bath')
 
             elif advanced_input['uniName'] == 'RMIT University':
                 result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related(
                     'property').filter(
                     property__no_bed__exact=advanced_input['bedNum']).filter(
-                    property__distance_rmit__lt=10000).select_related('agency').order_by('property__distance_rmit')
+                    property__distance_rmit__lt=10000).select_related('agency').order_by('property__distance_rmit', '-property__no_bed', '-property__no_bath')
             else:
                 result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related(
                     'property').filter(
-                    property__no_bed__exact=advanced_input['bedNum']).select_related('agency').order_by('price')
+                    property__no_bed__exact=advanced_input['bedNum']).select_related('agency').order_by('price', '-property__no_bed', '-property__no_bath')
         else:
             if advanced_input['uniName'] == 'University of Melbourne' :
                 result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
-                    property__no_bed__exact=advanced_input['bedNum']).filter(property__distance_umel__lt=10000).select_related('agency').order_by('property__distance_umel')
+                    property__no_bed__exact=advanced_input['bedNum']).filter(property__distance_umel__lt=10000).select_related('agency').order_by('property__distance_umel', '-property__no_bed', '-property__no_bath')
 
             elif advanced_input['uniName'] == 'RMIT University' :
                 result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
-                    property__no_bed__exact=advanced_input['bedNum']).filter(property__distance_rmit__lt=10000).select_related('agency').order_by('property__distance_rmit')
+                    property__no_bed__exact=advanced_input['bedNum']).filter(property__distance_rmit__lt=10000).select_related('agency').order_by('property__distance_rmit', '-property__no_bed', '-property__no_bath')
 
             else:
                 result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
-                    property__no_bed__exact=advanced_input['bedNum']).select_related('agency').order_by('price')
+                    property__no_bed__exact=advanced_input['bedNum']).select_related('agency').order_by('price', '-property__no_bed', '-property__no_bath')
 
         print(result_advanced)
 
