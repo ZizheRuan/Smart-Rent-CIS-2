@@ -78,7 +78,7 @@ def gather_domain_info(startpageNUmber):
             currentPage += 1
             file = get_house(currentPage)
             results = parse_one_page(file)
-            print('爬' + currentPage)
+            print(currentPage)
             for item in results:
                 house_info.append(item)
                 i += 1
