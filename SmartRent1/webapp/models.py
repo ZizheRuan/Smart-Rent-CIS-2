@@ -13,8 +13,8 @@ class Property(models.Model):
     house_type = models.CharField(max_length=20, blank=True)
     distance_umel = models.IntegerField(blank=True)
     distance_rmit = models.IntegerField(blank=True)
-    duration_umel = models.IntegerField(blank=True)
-    duration_rmit = models.IntegerField(blank=True)
+    duration_umel = models.CharField(max_length=20,blank=True)
+    duration_rmit = models.CharField(max_length=20,blank=True)
 
     def __str__(self):
         return self.address
