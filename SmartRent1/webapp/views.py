@@ -259,37 +259,57 @@ def updateView(request):
 
 
 
-# def resetRatings(request):
-#
-#     for i in range (1,1126):
-#         random.seed(a=None, version=2)
-#
-#         property_to_update_rating = Property.objects.get(pk=i)
-#         agency_to_update_rating = Agency.objects.get(pk=i)
-#         property_to_update_rating.loc_rating = random.randint(4,5)
-#         property_to_update_rating.fac_rating = 5
-#         property_to_update_rating.tran_rating = 5
-#         agency_to_update_rating.fri_rating = 5
-#         agency_to_update_rating.res_rating = 5
-#         agency_to_update_rating.bond_rating = 5
-#         property_to_update_rating.save()
-#         agency_to_update_rating.save()
-#
-#
-#         # random.seed(a=None, version=2)
-#         # random1 = random.randint(200,10000)
-#         # random2 = random.randint(200,10000)
-#         # random3 = random.randint(15,95)
-#         # random4 = random.randint(15,95)
-#         # pList[i].distance_umel = random1
-#         # pList[i].distance_rmit = random2
-#         # pList[i].duration_umel = random3
-#         # pList[i].duration_rmit = random4
-#
-#
-#         print(ratings)
-#
-#     return render(request,'webapp/updateRatings.html',{'ratings':ratings})
+def resetRatings(request):
+
+    for i in range (1,1127):
+        random.seed(a=None, version=2)
+
+        property_to_update_rating = Property.objects.get(pk=i)
+        agency_to_update_rating = Agency.objects.get(pk=i)
+        property_decimal_loc = random.randint(0, 9)
+        property_decimal_fac= random.randint(0, 9)
+        property_decimal_tran= random.randint(0, 9)
+        property_integer = random.randint(3, 4)
+        property_to_update_rating.loc_rating = property_integer + 0.1*property_decimal_loc
+        property_to_update_rating.fac_rating = property_integer + 0.1*property_decimal_fac
+        property_to_update_rating.tran_rating = property_integer + 0.1*property_decimal_tran
+        agency_decimal_loc = random.randint(0, 9)
+        agency_decimal_fac = random.randint(0, 9)
+        agency_decimal_tran = random.randint(0, 9)
+        agency_integer = random.randint(3, 4)
+        agency_to_update_rating.fri_rating = agency_integer + 0.1*agency_decimal_loc
+        agency_to_update_rating.res_rating = agency_integer + 0.1*agency_decimal_fac
+        agency_to_update_rating.bond_rating = agency_integer + 0.1*agency_decimal_tran
+        property_to_update_rating.save()
+        agency_to_update_rating.save()
+
+        print(property_to_update_rating.loc_rating)
+
+    # property_to_update_rating_93 = Property.objects.get(pk=93)
+    # agency_to_update_rating_93 = Agency.objects.get(pk=93)
+    # property_to_update_rating_93.loc_rating = 4.5
+    # property_to_update_rating_93.fac_rating = 4.5
+    # property_to_update_rating_93.tran_rating = 4.5
+    # agency_to_update_rating_93.fri_rating = 4.8
+    # agency_to_update_rating_93.res_rating = 4.8
+    # agency_to_update_rating_93.bond_rating = 4.8
+    #
+    # property_to_update_rating_2 = Property.objects.get(pk=1125)
+    # agency_to_update_rating_2 = Agency.objects.get(pk=1125)
+    # property_to_update_rating_2.loc_rating = 4.5
+    # property_to_update_rating_2.fac_rating = 4.5
+    # property_to_update_rating_2.tran_rating = 4.5
+    # agency_to_update_rating_2.fri_rating = 3.5
+    # agency_to_update_rating_2.res_rating = 3.5
+    # agency_to_update_rating_2.bond_rating = 3.5
+    #
+    # # print(agency_to_update_rating_93.fri_rating)
+    # # print(agency_to_update_rating_2.fri_rating)
+    #
+    # print(property_to_update_rating_93.address)
+    # print(property_to_update_rating_2.address)
+
+    return render(request,'webapp/resetRatings.html')
 
 
 

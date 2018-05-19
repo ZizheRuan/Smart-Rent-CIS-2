@@ -241,8 +241,8 @@
         var res_rating = "{{resource.agency.res_rating}}";
         var bond_rating = "{{resource.agency.bond_rating}}";
         var agent_avg = (Number(fri_rating) + Number(res_rating) + Number(bond_rating)) / 3;
-        document.getElementById('aratings-{{forloop.counter}}').innerHTML = agent_avg;
-        document.getElementById('pratings-{{forloop.counter}}').innerHTML = property_avg;
+        document.getElementById('aratings-{{forloop.counter}}').innerHTML = agent_avg.toFixed(1);
+        document.getElementById('pratings-{{forloop.counter}}').innerHTML = property_avg.toFixed(1);
     </script>
 
 
