@@ -16,4 +16,5 @@ urlpatterns = [
     path('<int:id>/',views.detailView,name='detail'),
     path('update-rating/', views.updateView, name='update'),
     path('exportCSV/', views.exportCSV, name='exportCSV'),
+    path('distance/',views.getDistance,name='distance')
 ]

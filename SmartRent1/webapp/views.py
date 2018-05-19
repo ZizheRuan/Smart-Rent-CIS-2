@@ -10,7 +10,11 @@ from .models import Property,Agency,Resource
 from decimal import Decimal
 import random
 import re
-
+import csv
+from django.http import HttpResponse
+import googlemaps
+from datetime import datetime
+from os.path import dirname, abspath
 
 # Create your views here.
 def indexView(request):
@@ -253,9 +257,6 @@ def updateView(request):
         return render(request,'webapp/updateRatings.html',{'ratings':ratings})
 
 
-import csv
-from django.http import HttpResponse
-
 def exportCSV(request):
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(content_type='text/csv')
@@ -268,3 +269,54 @@ def exportCSV(request):
         print('object No.'+str(i)+'has been saved')
     print('writting finished')
     return response
+
+#Never run getDistance function please!!(will change Database)
+def getDistance(request):
+    gmaps = googlemaps.Client(key='AIzaSyCuO8vC3nj-kg8a01oQxCMR11E5bJfFfB8')
+    now = datetime.now()
+    route = dirname(abspath(__file__)) + '/csvForDistance.csv'
+    with open(route, 'r', encoding='UTF-8') as f:
+        reader = csv.reader(f)
+        column = [row[1] for row in reader]
+    size_column = len(column)
+    locationList = []
+    for item in range(946,size_column-1):
+        locationList.append(column[item])
+    i = 0
+    j = 947
+    for location in locationList:
+        direction1 = gmaps.directions('Union House, University of Melbourne, Tin Alley, Parkville VIC 3010', location,
+                                    mode='walking', departure_time = now)
+        direction2 = gmaps.directions('Building 80, Melbourne VIC 3004', location,
+                                     mode='walking', departure_time=now)
+        distance_umel = direction1[0]['legs'][0]['distance']['value']
+        distance_rmit = direction2[0]['legs'][0]['distance']['value']
+        duration_umel = direction1[0]['legs'][0]['duration']['text']
+        duration_rmit = direction2[0]['legs'][0]['duration']['text']
+        i += 1
+
+        print("Hello  " + location + "  " + str(j))
+        print("unimelb:  " + str(distance_umel))
+        print("rmit:  " + str(distance_rmit))
+
+        distance_umel_to_update = get_object_or_404(Property, pk=j)
+        distance_umel_to_update.distance_umel = distance_umel
+        distance_umel_to_update.save()
+
+        distance_rmit_to_update = get_object_or_404(Property, pk=j)
+        distance_rmit_to_update.distance_rmit = distance_rmit
+        distance_rmit_to_update.save()
+
+        duration_umel_to_update = get_object_or_404(Property, pk=j)
+        duration_umel_to_update.duration_umel = duration_umel
+        duration_umel_to_update.save()
+
+        duration_rmit_to_update = get_object_or_404(Property, pk=j)
+        duration_rmit_to_update.duration_rmit = duration_rmit
+        duration_rmit_to_update.save()
+
+        print("unimelb:  " + duration_umel)
+        print("rmit:  " + duration_rmit)
+
+        j += 1
+    return render(request, 'webapp/distance.html')
