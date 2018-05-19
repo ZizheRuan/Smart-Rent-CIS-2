@@ -12,9 +12,9 @@ urlpatterns = [
     path('search-basic/',views.search_basic, name='basicSearch'),
     path('search-advanced/',views.search_advanced, name='advancedSearch'),
     path('index/about/',views.aboutView, name='about'),
-    path('result/', views.saveToTable, name='showResult'),
+    #path('result/', views.saveToTable, name='showResult'),
     path('<int:id>/',views.detailView,name='detail'),
     path('update-rating/', views.updateView, name='update'),
     path('exportCSV/', views.exportCSV, name='exportCSV'),
-    path('distance/',views.getDistance,name='distance')
+    #path('distance/',views.getDistance,name='distance')
 ]

@@ -3,7 +3,7 @@
 {% block title %}Basic Search Result Page {% endblock %}
 
 {% block body %}
-
+<link href="https://fonts.googleapis.com/css?family=Noticia+Text" rel="stylesheet">
 <style>
     body {
         font-family: 'Roboto';
@@ -19,6 +19,7 @@
         padding: 20px;
         float: left;
         width: 70%;
+        height: 410px
     }
 
     .poperty-details-iob {
@@ -94,7 +95,7 @@
     /*.rating-box-iob{background:#e55122; padding:8px; border-radius:5px; position:absolute; color:#fff; right:20px; margin-top:40px;}*/
     .rating-box-iob {
         background: #e55122;
-        padding: 8px;
+        padding: 4px;
         border-radius: 5px;
         color: #fff;
         right: 20px;
@@ -113,7 +114,7 @@
         background-color: #23527c;
         border-radius: 20px;
         color: #fff !important;
-        float: right
+        /*float: right*/
     }
 
     .agentimg {
@@ -163,7 +164,9 @@
                     <div class="col-lg-5 col-md-6 mr-iob-blr">
 
                         <img alt="image" class="img-responsive" src="{{ resource.property.house_img }}">
-
+                        <br>
+                        <a href="{% url 'webapp:detail' resource.id %}" class="detail" role="button">View Detail</a>
+                        <br>
                         <hr>
 
                     </div>
@@ -182,23 +185,24 @@
                             <li></li>
                         </ul>
 
-
-                        <br>
                         <ul class="list-of-ratings">
 
-                            <li><br/><strong>Agent Ratings:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</strong><span
-                                    class="rating-box-iob" id="aratings-{{forloop.counter}}">5</span></li>
+                            <li><br/><strong>Agent Ratings:&nbsp&nbsp</strong><span
+                                    class="rating-box-iob" id="aratings-{{forloop.counter}}">5</span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong>
+                                Property Ratings:&nbsp&nbsp</strong><span class="rating-box-iob"
+                                                                          id="pratings-{{forloop.counter}}">2</span></li>
 
-                            <li><br/><strong>Property Ratings:&nbsp&nbsp</strong><span class="rating-box-iob"
-                                                                                       id="pratings-{{forloop.counter}}">2</span>
+                            <!--<li><strong>Property Ratings:&nbsp&nbsp</strong><span class="rating-box-iob"-->
+                                                                                       <!--id="pratings-{{forloop.counter}}">2</span>-->
+                            <!--<br>-->
+                            <!--</li>-->
+                            <li id="showdistance-{{forloop.counter}}", style="font-family:'Noticia Text', serif; font-size: 13px; color:#23527c"><strong>Distance from <span
+                                    id="uniname-{{forloop.counter}}">Uni</span>:  <span id="distance-{{forloop.counter}}">1000m</span>m</strong>
                             </li>
-                            <li id="showdistance-{{forloop.counter}}"><strong>Distance to <span
-                                    id="uniname-{{forloop.counter}}">Uni</span> <span id="distance-{{forloop.counter}}">1000m</span>m
-                            </strong></li>
+                            <li id="showduration-{{forloop.counter}}", style="font-family:'Noticia Text', serif; font-size: 13px; color:#23527c "><strong>Duration of walk: <span id="duration-{{forloop.counter}}">1000m</span></strong>
+                            </li>
                         </ul>
-                        <br>
-                        <a href="{% url 'webapp:detail' resource.id %}" class="detail" role="button">View Detail</a>
-                        <br>
+
                     </div>
 
 
@@ -214,13 +218,18 @@
         document.getElementById("uniname-{{forloop.counter}}").innerHTML = uni;
         if (uni === "RMIT University") {
             var distance1 = "{{resource.property.distance_rmit}}";
+            var duration1 = "{{resource.property.duration_rmit}}";
             console.log("{{resource.property.distance_rmit}}");
             document.getElementById("distance-{{forloop.counter}}").innerHTML = distance1;
+            document.getElementById("duration-{{forloop.counter}}").innerHTML = duration1;
         } else if (uni === "University of Melbourne") {
             var distance2 = "{{resource.property.distance_umel}}";
+            var duration2 = "{{resource.property.duration_umel}}";
             document.getElementById("distance-{{forloop.counter}}").innerHTML = distance2;
+            document.getElementById("duration-{{forloop.counter}}").innerHTML = duration2;
         } else {
             document.getElementById("showdistance-{{forloop.counter}}").style.display = "none";
+            document.getElementById("showduration-{{forloop.counter}}").style.display = "none";
         }
 
         var loc_rating = "{{resource.property.loc_rating}}";

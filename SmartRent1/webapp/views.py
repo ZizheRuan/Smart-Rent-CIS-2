@@ -280,10 +280,10 @@ def getDistance(request):
         column = [row[1] for row in reader]
     size_column = len(column)
     locationList = []
-    for item in range(946,size_column-1):
+    for item in range(1125,size_column):
         locationList.append(column[item])
     i = 0
-    j = 947
+    j = 1126
     for location in locationList:
         direction1 = gmaps.directions('Union House, University of Melbourne, Tin Alley, Parkville VIC 3010', location,
                                     mode='walking', departure_time = now)
@@ -319,4 +319,4 @@ def getDistance(request):
         print("rmit:  " + duration_rmit)
 
         j += 1
-    return render(request, 'webapp/distance.html')
+        return render(request, 'webapp/distance.html')
