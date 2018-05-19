@@ -28,7 +28,7 @@
                                     {% csrf_token %}
 
                                     <input id="search" type="text" class="form-control" name="basic-input"
-                                           placeholder="Search by uni, suburb or postcode">
+                                           placeholder="Search by university, suburb or postcode">
                                     <span class="input-group-addon">
                                                 <button type="submit" value="Submit">
                                                     <span class="glyphicon glyphicon-search"></span>
@@ -125,13 +125,16 @@
 
 
             <div class="col-lg-5 col-lg-offset-2 col-sm-6">
-                <hr class="section-heading-spacer">
+                <div class="clearfix"></div>
+                <h2 class="section-heading">How to start your rental journey:</h2>
+                <!--<hr class="section-heading-spacer">-->
+                <hr>
                 <div class="clearfix"></div>
                 <h2 class="section-heading">Smart Searching</h2>
                 <p class="lead">Type your university, preferred suburb or postcode in the search bar above to start a basic fuzzy search.</p>
                 <p class="lead">Or select your university and distance range on the left side to start a precise search.</p>
                 <h2 class="section-heading">Smart Sorting</h2>
-                <p class="lead">Searching by uni? Properties nearest the uni would show first. Results come with distance and duration.</p>
+                <p class="lead">Searching by uni? Properties nearest the uni would show first. Results come with distance and duration to your uni.</p>
                 <p class="lead">Doesn't care about distance? Results would be prioritised by price and bedrooms.</p>
 
             </div>
@@ -148,17 +151,17 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-5 col-sm-6">
-                <hr class="section-heading-spacer">
+                <!--<hr class="section-heading-spacer">-->
                 <div class="clearfix"></div>
                 <h2 class="section-heading">Smart Aggregation</h2>
-                <p class="lead">Based on location of universities, we've gathered rental information from <a target="_blank" href="https://www.realestate.com.au/rent">Realestate</a>
+                <p class="lead">Based on the locations of universities, we've gathered the rental information from <a target="_blank" href="https://www.realestate.com.au/rent">Realestate</a>
                     and <a target="_blank" href="https://www.domain.com.au/?mode=rent">Domain</a> for you.</p>
-                <p class="lead">Enjoy selecting and comparing without the hassle of repeat searching on different websites, we got all the rental information for you.</p>
+                <p class="lead">Enjoy selecting and comparing without the hassle of repeat searching on different websites, we got all the rental information you need.</p>
             </div>
 
             <div class="col-lg-5 col-lg-offset-2 col-sm-6">
 
-                <img class="img-responsive" src="{% static 'webapp/img/unimelb.jpg' %}" alt="">
+                <img class="img-responsive" src="{% static 'webapp/img/agents.png' %}" alt="">
             </div>
         </div>
 
@@ -174,14 +177,14 @@
 
         <div class="row">
             <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-                <hr class="section-heading-spacer">
+                <!--<hr class="section-heading-spacer">-->
                 <div class="clearfix"></div>
-                <h2 class="section-heading">Smart Rating and Comment</h2>
-                <p class="lead">Fear of hostile agents? Worry about your bond? Angry with slow responses from agents?<br>See the ratings and comments of the agent!</p>
-                <p class="lead">Fear of hidden defects? Worry about facility condition and transportation?<br>See the the ratings and comments of the property!</p>
+                <h2 class="section-heading">Smart Rating and Review</h2>
+                <p class="lead">Fear of hostile agents? Worry about your bond? Angry with slow responses from agents?<br>See the ratings and comments of the agents to avoid them!</p>
+                <p class="lead">Fear of hidden defects? Worry about facility condition and transportation?<br>We offer the ratings and comments of the property!</p>
             </div>
             <div class="col-lg-5 col-sm-pull-6  col-sm-6">
-                <img class="img-responsive" src="{% static 'webapp/img/RMIT.jpg' %}" alt="">
+                <img class="img-responsive" id="rmit" src="{% static 'webapp/img/review.png' %}" alt="">
             </div>
         </div>
 
@@ -200,16 +203,17 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-5 col-sm-6">
-                <hr class="section-heading-spacer">
+                <!--<hr class="section-heading-spacer">-->
                 <div class="clearfix"></div>
                 <h2 class="section-heading">Story of Smart Rent</h2>
-                <p class="lead">Smart Rent is a rental platform created by students and for students. We suffered from what you have suffered, we know what you need.</p>
-                <p class="lead">More universities and rental websites are going to be supported. Join us now by signing up with your uni email.</p>
+                <p class="lead">Smart Rent is a review aggregator platform created by students and for students. We have suffered from what you are suffering, we know what you need.</p>
+                <p class="lead">We are working on more universities and rental websites. Sign up with your uni email account today to begin your journey. Together, we can make the
+                    market more transparent and fair!</p>
             </div>
 
             <div class="col-lg-5 col-lg-offset-2 col-sm-6">
 
-                <img class="img-responsive" src="{% static 'webapp/img/unimelb.jpg' %}" alt="">
+                <img class="img-responsive" src="{% static 'webapp/img/agentWomanIcon.jpg' %}" alt="">
             </div>
         </div>
 
