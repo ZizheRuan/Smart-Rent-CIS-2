@@ -33,19 +33,19 @@ def search_basic(request):
         match_rmit = re.search("((?i)R(\w*\s*)*M(\w*\s*)*I(\w*\s*)*T(\w*\s*)*)", str(searhInput))
         if match_umel:
             print('match_umel')
-            result_basic = Resource.objects.filter(property__distance_umel__lt=10000).order_by(
+            result_basic = Resource.objects.filter(property__distance_umel__lt=10000).filter(price__gt=300).filter(price__lt=2000).order_by(
                 'property__distance_umel', '-property__no_bed', '-property__no_bath').select_related(
                 'property').select_related('agency')
             uniName = 'University of Melbourne'
         elif match_rmit:
             print('match_rmit')
-            result_basic = Resource.objects.filter(property__distance_rmit__lt=10000).order_by(
+            result_basic = Resource.objects.filter(property__distance_rmit__lt=10000).filter(price__gt=300).filter(price__lt=2000).order_by(
                 'property__distance_rmit', '-property__no_bed', '-property__no_bath').select_related(
                 'property').select_related('agency')
             uniName = 'RMIT University'
         else:
             print('match_other')
-            result_basic = Resource.objects.filter(property__address__contains=str(searhInput)).select_related(
+            result_basic = Resource.objects.filter(property__address__contains=str(searhInput)).filter(price__gt=300).filter(price__lt=2000).select_related(
                 'property').select_related('agency').order_by('price', '-property__no_bed', '-property__no_bath')
             uniName = 'Any'
 
@@ -61,36 +61,82 @@ def search_advanced(request):
             'uniName': request.POST['uni-name'],
             'houseType': request.POST['house-type'],
             'maxPrice': request.POST['max-price'],
-            'bedNum': request.POST['bed-num']
+            'bedNum': request.POST['bed-num'],
+            'distanceRange': request.POST['distance-range']
         }
-        if advanced_input['houseType'] == 'any':
-            if advanced_input['uniName'] == 'University of Melbourne':
-                result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related(
-                    'property').filter(
-                    property__no_bed__exact=advanced_input['bedNum']).filter(
-                    property__distance_umel__lt=10000).select_related('agency').order_by('property__distance_umel', '-property__no_bed', '-property__no_bath')
 
-            elif advanced_input['uniName'] == 'RMIT University':
-                result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related(
-                    'property').filter(
-                    property__no_bed__exact=advanced_input['bedNum']).filter(
-                    property__distance_rmit__lt=10000).select_related('agency').order_by('property__distance_rmit', '-property__no_bed', '-property__no_bath')
+        if advanced_input['maxPrice']== '' :
+            print('empty price found')
+            advanced_input['maxPrice'] = 2000
+            print(advanced_input['maxPrice'])
+
+        if advanced_input['bedNum']== '' :
+            if advanced_input['houseType'] == 'any':
+                if advanced_input['uniName'] == 'University of Melbourne':
+                    result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).filter(
+                        price__gt=300).filter(price__lt=2000).select_related(
+                        'property').filter(
+                        property__distance_umel__lt=advanced_input['distanceRange']).select_related('agency').order_by(
+                        'property__distance_umel', '-property__no_bath')
+
+                elif advanced_input['uniName'] == 'RMIT University':
+                    result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).filter(
+                        price__gt=300).filter(price__lt=2000).select_related(
+                        'property').filter(
+                        property__distance_rmit__lt=advanced_input['distanceRange']).select_related('agency').order_by(
+                        'property__distance_rmit', '-property__no_bath')
+                else:
+                    result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).filter(
+                        price__gt=300).filter(price__lt=2000).select_related(
+                        'property').select_related('agency').order_by('price', '-property__no_bath')
             else:
-                result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related(
-                    'property').filter(
-                    property__no_bed__exact=advanced_input['bedNum']).select_related('agency').order_by('price', '-property__no_bed', '-property__no_bath')
+                if advanced_input['uniName'] == 'University of Melbourne':
+                    result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).filter(
+                        price__gt=300).filter(price__lt=2000).select_related('property').filter(
+                        property__house_type__exact=advanced_input['houseType']).filter(
+                        property__distance_umel__lt=advanced_input['distanceRange']).select_related('agency').order_by(
+                        'property__distance_umel', '-property__no_bath')
+
+                elif advanced_input['uniName'] == 'RMIT University':
+                    result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).filter(
+                        price__gt=300).filter(price__lt=2000).select_related('property').filter(
+                        property__house_type__exact=advanced_input['houseType']).filter(
+                        property__distance_rmit__lt=advanced_input['distanceRange']).select_related('agency').order_by(
+                        'property__distance_rmit', '-property__no_bath')
+
+                else:
+                    result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).filter(
+                        price__gt=300).filter(price__lt=2000).select_related('property').filter(
+                        property__house_type__exact=advanced_input['houseType']).select_related('agency').order_by('price', '-property__no_bath')
         else:
-            if advanced_input['uniName'] == 'University of Melbourne' :
-                result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
-                    property__no_bed__exact=advanced_input['bedNum']).filter(property__distance_umel__lt=10000).select_related('agency').order_by('property__distance_umel', '-property__no_bed', '-property__no_bath')
+            if advanced_input['houseType'] == 'any':
+                if advanced_input['uniName'] == 'University of Melbourne':
+                    result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).filter(price__gt=300).filter(price__lt=2000).select_related(
+                        'property').filter(
+                        property__no_bed__exact=advanced_input['bedNum']).filter(
+                        property__distance_umel__lt=advanced_input['distanceRange']).select_related('agency').order_by('property__distance_umel', '-property__no_bed', '-property__no_bath')
 
-            elif advanced_input['uniName'] == 'RMIT University' :
-                result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
-                    property__no_bed__exact=advanced_input['bedNum']).filter(property__distance_rmit__lt=10000).select_related('agency').order_by('property__distance_rmit', '-property__no_bed', '-property__no_bath')
-
+                elif advanced_input['uniName'] == 'RMIT University':
+                    result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).filter(price__gt=300).filter(price__lt=2000).select_related(
+                        'property').filter(
+                        property__no_bed__exact=advanced_input['bedNum']).filter(
+                        property__distance_rmit__lt=advanced_input['distanceRange']).select_related('agency').order_by('property__distance_rmit', '-property__no_bed', '-property__no_bath')
+                else:
+                    result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).filter(price__gt=300).filter(price__lt=2000).select_related(
+                        'property').filter(
+                        property__no_bed__exact=advanced_input['bedNum']).select_related('agency').order_by('price', '-property__no_bed', '-property__no_bath')
             else:
-                result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
-                    property__no_bed__exact=advanced_input['bedNum']).select_related('agency').order_by('price', '-property__no_bed', '-property__no_bath')
+                if advanced_input['uniName'] == 'University of Melbourne' :
+                    result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).filter(price__gt=300).filter(price__lt=2000).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
+                        property__no_bed__exact=advanced_input['bedNum']).filter(property__distance_umel__lt=advanced_input['distanceRange']).select_related('agency').order_by('property__distance_umel', '-property__no_bed', '-property__no_bath')
+
+                elif advanced_input['uniName'] == 'RMIT University' :
+                    result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).filter(price__gt=300).filter(price__lt=2000).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
+                        property__no_bed__exact=advanced_input['bedNum']).filter(property__distance_rmit__lt=advanced_input['distanceRange']).select_related('agency').order_by('property__distance_rmit', '-property__no_bed', '-property__no_bath')
+
+                else:
+                    result_advanced = Resource.objects.filter(price__lt=advanced_input['maxPrice']).filter(price__gt=300).filter(price__lt=2000).select_related('property').filter(property__house_type__exact=advanced_input['houseType']).filter(
+                        property__no_bed__exact=advanced_input['bedNum']).select_related('agency').order_by('price', '-property__no_bed', '-property__no_bath')
 
         print(result_advanced)
 
@@ -158,15 +204,15 @@ def saveToTable(request) :
             pList[i].no_bath = feature['bathroom']
         pList[i].house_type = feature['houseType']
 
-        random.seed(a=None, version=2)
-        random1 = random.randint(200,10000)
-        random2 = random.randint(200,10000)
-        random3 = random.randint(15,95)
-        random4 = random.randint(15,95)
-        pList[i].distance_umel = random1
-        pList[i].distance_rmit = random2
-        pList[i].duration_umel = random3
-        pList[i].duration_rmit = random4
+        # random.seed(a=None, version=2)
+        # random1 = random.randint(200,10000)
+        # random2 = random.randint(200,10000)
+        # random3 = random.randint(15,95)
+        # random4 = random.randint(15,95)
+        # pList[i].distance_umel = random1
+        # pList[i].distance_rmit = random2
+        # pList[i].duration_umel = random3
+        # pList[i].duration_rmit = random4
         pList[i].save()
 
         aList[i].name = feature['agentPeople']
@@ -255,6 +301,62 @@ def updateView(request):
         print(ratings)
 
         return render(request,'webapp/updateRatings.html',{'ratings':ratings})
+
+
+
+def resetRatings(request):
+
+    for i in range (1,1127):
+        random.seed(a=None, version=2)
+
+        property_to_update_rating = Property.objects.get(pk=i)
+        agency_to_update_rating = Agency.objects.get(pk=i)
+        property_decimal_loc = random.randint(0, 9)
+        property_decimal_fac= random.randint(0, 9)
+        property_decimal_tran= random.randint(0, 9)
+        property_integer = random.randint(3, 4)
+        property_to_update_rating.loc_rating = property_integer + 0.1*property_decimal_loc
+        property_to_update_rating.fac_rating = property_integer + 0.1*property_decimal_fac
+        property_to_update_rating.tran_rating = property_integer + 0.1*property_decimal_tran
+        agency_decimal_loc = random.randint(0, 9)
+        agency_decimal_fac = random.randint(0, 9)
+        agency_decimal_tran = random.randint(0, 9)
+        agency_integer = random.randint(3, 4)
+        agency_to_update_rating.fri_rating = agency_integer + 0.1*agency_decimal_loc
+        agency_to_update_rating.res_rating = agency_integer + 0.1*agency_decimal_fac
+        agency_to_update_rating.bond_rating = agency_integer + 0.1*agency_decimal_tran
+        property_to_update_rating.save()
+        agency_to_update_rating.save()
+
+        print(property_to_update_rating.loc_rating)
+
+    # property_to_update_rating_93 = Property.objects.get(pk=93)
+    # agency_to_update_rating_93 = Agency.objects.get(pk=93)
+    # property_to_update_rating_93.loc_rating = 4.5
+    # property_to_update_rating_93.fac_rating = 4.5
+    # property_to_update_rating_93.tran_rating = 4.5
+    # agency_to_update_rating_93.fri_rating = 4.8
+    # agency_to_update_rating_93.res_rating = 4.8
+    # agency_to_update_rating_93.bond_rating = 4.8
+    #
+    # property_to_update_rating_2 = Property.objects.get(pk=1125)
+    # agency_to_update_rating_2 = Agency.objects.get(pk=1125)
+    # property_to_update_rating_2.loc_rating = 4.5
+    # property_to_update_rating_2.fac_rating = 4.5
+    # property_to_update_rating_2.tran_rating = 4.5
+    # agency_to_update_rating_2.fri_rating = 3.5
+    # agency_to_update_rating_2.res_rating = 3.5
+    # agency_to_update_rating_2.bond_rating = 3.5
+    #
+    # # print(agency_to_update_rating_93.fri_rating)
+    # # print(agency_to_update_rating_2.fri_rating)
+    #
+    # print(property_to_update_rating_93.address)
+    # print(property_to_update_rating_2.address)
+
+    return render(request,'webapp/resetRatings.html')
+
+
 
 
 def exportCSV(request):

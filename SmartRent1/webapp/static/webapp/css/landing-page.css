@@ -39,7 +39,7 @@ h1{
     text-align: center;
     /*color: #f8f8f8;*/
     color: #c4e3f3;
-    background: url(../img/school.jpg) no-repeat center center;
+    background: url(../img/darkHeader-2.jpg) no-repeat center center;
     background-size: cover;
 }
 
@@ -121,7 +121,7 @@ h1{
 .banner {
     padding: 100px 0;
     color: #f8f8f8;
-    background: url(../img/banner-bg.jpg) no-repeat center center;
+    background: url(../img/darkBanner-1.jpg) no-repeat center center;
     background-size: cover;
 }
 

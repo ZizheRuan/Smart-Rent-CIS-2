@@ -13,7 +13,7 @@
             <div class="col-lg-12">
                 <div class="intro-message">
                     <!--<h1>SMART RENT</h1>-->
-                    <h1>Students-Oriented Rental Platform</h1>
+                    <h1>Student-Oriented Rental Platform</h1>
                     <!--<hr class="intro-divider">-->
 
                     <!--Search Bar-->
@@ -28,7 +28,7 @@
                                     {% csrf_token %}
 
                                     <input id="search" type="text" class="form-control" name="basic-input"
-                                           placeholder="Search Your Uni, Street Name, Postcode">
+                                           placeholder="Search by university, suburb or postcode">
                                     <span class="input-group-addon">
                                                 <button type="submit" value="Submit">
                                                     <span class="glyphicon glyphicon-search"></span>
@@ -66,12 +66,12 @@
             <!--Advanced Search-->
             <div class="col-lg-5  col-sm-6">
                 <div class="well">
-                    <h3 align="center">Search Filter</h3>
+                    <h3 align="center">Advanced Search</h3>
 
                     <form class="form-horizontal" action="/webapp/search-advanced/" method="post">
                         {% csrf_token %}
                         <div class="form-group">
-                            <label for="location1" class="control-label">University</label>
+                            <label for="location1" class="control-label">University </label>
                             <select class="form-control" name="uni-name" id="location1" value="Any" required>
                                 <option value="Any">Any</option>
                                 <option value="University of Melbourne">University of Melbourne</option>
@@ -79,31 +79,42 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="type1" class="control-label">Type</label>
-                            <select class="form-control" name="house-type" id="type1" value="Any" required>
-                                <option value="any">any</option>
-                                <option value="house">house</option>
-                                <option value="apartment">apartment</option>
-                                <option value="studio">studio</option>
+                            <label for="range" class="control-label">Max. Distance to your Uni</label>
+                            <select class="form-control" name="distance-range" id="range" value="Any" required>
+                              <option value="12000">Any</option>
+                              <option value="500">500 m</option>
+                              <option value="1000">1 km</option>
+                              <option value="3000">3 km</option>
+                              <option value="6000">6 km</option>
+                              <option value="100000">10 km</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="pricefrom" class="control-label">Max Price</label>
+                            <label for="type1" class="control-label">Property Type</label>
+                            <select class="form-control" name="house-type" id="type1" value="Any" required>
+                                <option value="any">Any</option>
+                                <option value="house">House</option>
+                                <option value="apartment">Apartment</option>
+                                <option value="studio">Studio</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="pricefrom" class="control-label">Max. Price pw</label>
                             <div class="input-group">
 
                                 <i class="glyphicon glyphicon-usd input-group-addon"></i>
                                 <!--<div class="input-group-addon" id="basic-addon1">$</div>-->
                                 <input type="text" class="form-control" name="max-price" id="pricefrom"
-                                       aria-describedby="basic-addon1" required>
+                                       aria-describedby="basic-addon1" >
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="priceto" class="control-label">Bed Number</label>
+                            <label for="priceto" class="control-label">Bedroom Number</label>
                             <div class="input-group">
                                 <!--<div class="input-group-addon" id="basic-addon2">$</div>-->
                                 <i class="glyphicon glyphicon-bed input-group-addon"></i>
                                 <input type="text" class="form-control" name="bed-num" id="priceto"
-                                       aria-describedby="basic-addon1" required>
+                                       aria-describedby="basic-addon1" >
                             </div>
                         </div>
                         <button type="submit" class="btn btn-danger glyphicon glyphicon-search" value="Submit"></button>
@@ -114,12 +125,18 @@
 
 
             <div class="col-lg-5 col-lg-offset-2 col-sm-6">
-                <hr class="section-heading-spacer">
                 <div class="clearfix"></div>
-                <h2 class="section-heading">Search Based On Your<br>Preference</h2>
-                <p class="lead">Turn your 2D designs into high quality, 3D product shots in seconds using free Photoshop
-                    actions by <a target="_blank" href="http://www.psdcovers.com/">PSDCovers</a>! Visit their website to
-                    download some of their awesome, free photoshop actions!</p>
+                <h2 class="section-heading">How to start your rental journey:</h2>
+                <!--<hr class="section-heading-spacer">-->
+                <hr>
+                <div class="clearfix"></div>
+                <h2 class="section-heading">Smart Searching</h2>
+                <p class="lead">Type your university, preferred suburb or postcode in the search bar above to start a basic fuzzy search.</p>
+                <p class="lead">Or select your university and distance range on the left side to start a precise search. All fields are optional.</p>
+                <h2 class="section-heading">Smart Sorting</h2>
+                <p class="lead">Searching by uni? Properties nearest the uni would show first. Results come with distance and duration to your uni.</p>
+                <p class="lead">Doesn't care about distance? Results would be prioritised by price and bedrooms.</p>
+
             </div>
         </div>
 
@@ -134,17 +151,17 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-5 col-sm-6">
-                <hr class="section-heading-spacer">
+                <!--<hr class="section-heading-spacer">-->
                 <div class="clearfix"></div>
-                <h2 class="section-heading">A Rental Platform Created By Students and For Students</h2>
-                <p class="lead">A special thanks to <a target="_blank" href="http://join.deathtothestockphoto.com/">Death
-                    to the Stock Photo</a> for providing the photographs that you see in this template. Visit their
-                    website to become a member.</p>
+                <h2 class="section-heading">Smart Aggregation</h2>
+                <p class="lead">Based on the locations of universities, we've gathered the rental information from <a target="_blank" href="https://www.realestate.com.au/rent">Realestate</a>
+                    and <a target="_blank" href="https://www.domain.com.au/?mode=rent">Domain</a> for you.</p>
+                <p class="lead">Enjoy selecting and comparing without the hassle of repeat searching on different websites, we got all the rental information you need.</p>
             </div>
 
             <div class="col-lg-5 col-lg-offset-2 col-sm-6">
 
-                <img class="img-responsive" src="{% static 'webapp/img/unimelb.jpg' %}" alt="">
+                <img class="img-responsive" src="{% static 'webapp/img/agents.png' %}" alt="">
             </div>
         </div>
 
@@ -160,15 +177,43 @@
 
         <div class="row">
             <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-                <hr class="section-heading-spacer">
+                <!--<hr class="section-heading-spacer">-->
                 <div class="clearfix"></div>
-                <h2 class="section-heading">3D Device Mockups<br>by PSDCovers</h2>
-                <p class="lead">Turn your 2D designs into high quality, 3D product shots in seconds using free Photoshop
-                    actions by <a target="_blank" href="http://www.psdcovers.com/">PSDCovers</a>! Visit their website to
-                    download some of their awesome, free photoshop actions!</p>
+                <h2 class="section-heading">Smart Rating and Review</h2>
+                <p class="lead">Fear of hostile agents? Worry about your bond? Angry with slow responses from agents?<br>See the ratings and comments of the agents to avoid them!</p>
+                <p class="lead">Fear of hidden defects? Worry about facility condition and transportation?<br>We offer the ratings and comments of the property!</p>
             </div>
             <div class="col-lg-5 col-sm-pull-6  col-sm-6">
-                <img class="img-responsive" src="{% static 'webapp/img/RMIT.jpg' %}" alt="">
+                <img class="img-responsive" id="rmit" src="{% static 'webapp/img/review.png' %}" alt="">
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container -->
+<!--A Rental Platform Created By Students and For Students-->
+</div>
+<!-- /.content-section-b -->
+
+
+
+
+
+<div class="content-section-a">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5 col-sm-6">
+                <!--<hr class="section-heading-spacer">-->
+                <div class="clearfix"></div>
+                <h2 class="section-heading">Story of Smart Rent</h2>
+                <p class="lead">Smart Rent is a review aggregator platform created by students and for students. We have suffered from what you are suffering, we know what you need.</p>
+                <p class="lead">We are working on more universities and rental websites. Sign up with your uni email account today to begin your journey. Together, we can make the
+                    market transparent and fair!</p>
+            </div>
+
+            <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+
+                <img class="img-responsive" src="{% static 'webapp/img/agentWomanIcon.jpg' %}" alt="">
             </div>
         </div>
 
@@ -176,7 +221,12 @@
     <!-- /.container -->
 
 </div>
-<!-- /.content-section-b -->
+<!-- /.content-section-a -->
+
+
+
+
+
 
 <!--<div class="content-section-a">-->
 
@@ -207,7 +257,7 @@
 
         <div class="row">
             <div class="col-lg-6">
-                <h2>Contact Us</h2>
+                <h2>CONNECT WITH US</h2>
             </div>
             <div class="col-lg-6">
                 <ul class="list-inline banner-social-buttons">
@@ -216,11 +266,11 @@
                                 class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
                     </li>
                     <li>
-                        <a href="https://github.com/swatghc/Smart-Rent-CIS" class="btn btn-default btn-lg"><i
+                        <a href="https://github.com/ZizheRuan/Smart-Rent-CIS-2" class="btn btn-default btn-lg"><i
                                 class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
                     </li>
                     <li>
-                        <a href="#" class="btn btn-default btn-lg"><i class="fa fa-linkedin fa-fw"></i> <span
+                        <a href="https://www.linkedin.com/company/smartrent-au/" class="btn btn-default btn-lg"><i class="fa fa-linkedin fa-fw"></i> <span
                                 class="network-name">Linkedin</span></a>
                     </li>
                 </ul>
