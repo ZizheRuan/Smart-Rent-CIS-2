@@ -34,13 +34,16 @@ def parse_one_page(html):
     for item in items:
         bed_number = item[10]
         test = re.sub('\D', '', item[2])
+        # print(test)
         if test == '':
             pass
         elif 20000 > int(test) > 4000:
             test = test[0:3]
+            # print('11111')
         else:
             test = test [0:4]
-            if int(test) > 2000 and int(bed_number) < 2:
+            # print('22222222')
+            if int(test) > 2000 and int(bed_number) <= 2:
                 test = test [0:3]
         house_type = item[12]
         if len(house_type) > 7:
@@ -92,4 +95,4 @@ def gather_domain_info(startpageNUmber):
 
     return house_info
 
-# gather_domain_info(44)
+# gather_domain_info(20)
