@@ -75,6 +75,7 @@
         color: #e55122;
     }
 
+
     /*.cls-for-btn-listing{margin:auto; padding:0; display:inline-block; text-align:center; width:100%; margin-top:130px;}*/
     /*.cls-for-btn-listing li{margin:auto; padding:0; display:inline-block; }*/
     /*.cls-for-btn-listing li a{margin:auto; padding:10px 15px; display:inline-block; background:#e55122 !important; border-radius:20px; color:#fff !important; }*/
@@ -148,6 +149,9 @@
         align-content: center;
 
     }
+    a {
+        color:#e55122;
+    }
 </style>
 
 
@@ -173,8 +177,7 @@
 
 
                     <div class="col-md-6">
-                        <h4><strong>{{ resource.property.address }}</strong><br/>
-                        </h4>
+                        <h4 id="address"><a href="{% url 'webapp:detail' resource.id %}">{{ resource.property.address }} </a></h4>
                         <ul class="poperty-details-iob">
                             <li id="pricetag">${{ resource.price }}</li>
                             <li>{{ resource.property.no_bed }} <i class="fa fa-bed" style="font-size:24px"></i></li>

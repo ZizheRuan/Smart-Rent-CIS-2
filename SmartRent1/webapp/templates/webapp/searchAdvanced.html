@@ -148,6 +148,9 @@
         align-content: center;
 
     }
+        a {
+        color:#e55122;
+    }
 </style>
 
 
@@ -173,7 +176,7 @@
 
 
                     <div class="col-md-6">
-                        <h4><strong>{{ resource.property.address }}</strong><br/>
+                        <h4><strong><a href="{% url 'webapp:detail' resource.id %}">{{ resource.property.address }} </a></strong><br/>
                         </h4>
                         <ul class="poperty-details-iob">
                             <li id="pricetag">${{ resource.price }}</li>
@@ -241,8 +244,8 @@
         var res_rating = "{{resource.agency.res_rating}}";
         var bond_rating = "{{resource.agency.bond_rating}}";
         var agent_avg = (Number(fri_rating) + Number(res_rating) + Number(bond_rating)) / 3;
-        document.getElementById('aratings-{{forloop.counter}}').innerHTML = agent_avg;
-        document.getElementById('pratings-{{forloop.counter}}').innerHTML = property_avg;
+        document.getElementById('aratings-{{forloop.counter}}').innerHTML = agent_avg.toFixed(1);
+        document.getElementById('pratings-{{forloop.counter}}').innerHTML = property_avg.toFixed(1);
     </script>
 
 
