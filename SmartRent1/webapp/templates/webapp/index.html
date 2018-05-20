@@ -71,7 +71,7 @@
                     <form class="form-horizontal" action="/webapp/search-advanced/" method="post">
                         {% csrf_token %}
                         <div class="form-group">
-                            <label for="location1" class="control-label">University (Optional)</label>
+                            <label for="location1" class="control-label">University </label>
                             <select class="form-control" name="uni-name" id="location1" value="Any" required>
                                 <option value="Any">Any</option>
                                 <option value="University of Melbourne">University of Melbourne</option>
@@ -79,7 +79,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="range" class="control-label">Max. Distance to your Uni (Optional)</label>
+                            <label for="range" class="control-label">Max. Distance to your Uni</label>
                             <select class="form-control" name="distance-range" id="range" value="Any" required>
                               <option value="12000">Any</option>
                               <option value="500">500 m</option>
@@ -105,7 +105,7 @@
                                 <i class="glyphicon glyphicon-usd input-group-addon"></i>
                                 <!--<div class="input-group-addon" id="basic-addon1">$</div>-->
                                 <input type="text" class="form-control" name="max-price" id="pricefrom"
-                                       aria-describedby="basic-addon1" required>
+                                       aria-describedby="basic-addon1" >
                             </div>
                         </div>
                         <div class="form-group">
@@ -114,7 +114,7 @@
                                 <!--<div class="input-group-addon" id="basic-addon2">$</div>-->
                                 <i class="glyphicon glyphicon-bed input-group-addon"></i>
                                 <input type="text" class="form-control" name="bed-num" id="priceto"
-                                       aria-describedby="basic-addon1" required>
+                                       aria-describedby="basic-addon1" >
                             </div>
                         </div>
                         <button type="submit" class="btn btn-danger glyphicon glyphicon-search" value="Submit"></button>
@@ -132,7 +132,7 @@
                 <div class="clearfix"></div>
                 <h2 class="section-heading">Smart Searching</h2>
                 <p class="lead">Type your university, preferred suburb or postcode in the search bar above to start a basic fuzzy search.</p>
-                <p class="lead">Or select your university and distance range on the left side to start a precise search.</p>
+                <p class="lead">Or select your university and distance range on the left side to start a precise search. All fields are optional.</p>
                 <h2 class="section-heading">Smart Sorting</h2>
                 <p class="lead">Searching by uni? Properties nearest the uni would show first. Results come with distance and duration to your uni.</p>
                 <p class="lead">Doesn't care about distance? Results would be prioritised by price and bedrooms.</p>
