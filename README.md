@@ -15,4 +15,7 @@ rather than searching on different websites, copying the address and pasting to 
 We aim to make students get rid of the hostile agents, bad landlords and properties with hidden defects.
 Meanwhile, highlight the agents and landlords with good reputations, along with the satisfying properties.
 
-Rate your agent, comment on your property, join our campaign to make the market transparent and fair!
+Rate your agent, comment on your property, join our campaign to make the market transparent and fair! The code of this website is made public on GitHub to
+offer a transparent rating mechanism.
+
+Developers: Bowen Rao, Zizhe Ruan, Tenglun Tan, and Zhe Xu. Master of Information Technology students in The University of Melbourne.
